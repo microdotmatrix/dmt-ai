@@ -5,20 +5,13 @@ export const env = createEnv({
   server: {
     DATABASE_URL: z.string().min(1),
     BASE_URL: z.string().min(1),
-  },
-  createFinalSchema: (env) => {
-    return z.object(env).transform((val) => {
-      const { DATABASE_URL, BASE_URL, ...rest } = val;
-      return {
-        DATABASE_URL,
-        BASE_URL,
-        ...rest,
-      };
-    });
+    CLERK_SECRET_KEY: z.string().min(1),
+    ANTHROPIC_API_KEY: z.string().min(1),
+    OPENAI_API_KEY: z.string().min(1),
+    OPENROUTER_API_KEY: z.string().min(1),
+    UPLOADTHING_TOKEN: z.string().min(1),
+    ARCJET_KEY: z.string().min(1),
   },
   emptyStringAsUndefined: true,
-  experimental__runtimeEnv: {
-    DATABASE_URL: process.env.DATABASE_URL,
-    BASE_URL: process.env.BASE_URL,
-  },
+  experimental__runtimeEnv: process.env,
 });
