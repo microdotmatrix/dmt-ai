@@ -18,6 +18,7 @@ import { useMounted } from "@/hooks/use-mounted";
 import { navigationLinks } from "@/lib/config";
 import { cn } from "@/lib/utils";
 import {
+  OrganizationSwitcher,
   SignedIn,
   SignedOut,
   SignInButton,
@@ -25,6 +26,7 @@ import {
   useUser,
 } from "@clerk/nextjs";
 import { usePathname } from "next/navigation";
+import { Separator } from "../ui/separator";
 
 export const Header = () => {
   const pathname = usePathname();
@@ -70,9 +72,15 @@ export const Header = () => {
                 </svg>
               </Button>
             </PopoverTrigger>
-            <PopoverContent align="start" className="w-36 p-1 md:hidden">
+            <PopoverContent align="start" className="w-fit p-1 md:hidden">
+              <SignedIn>
+                <div className="my-2">
+                  <OrganizationSwitcher />
+                </div>
+                <Separator className="my-2" />
+              </SignedIn>
               <NavigationMenu className="max-w-none *:w-full">
-                <NavigationMenuList className="flex-col items-start gap-0 md:gap-2">
+                <NavigationMenuList className="flex-col items-start gap-1 md:gap-2">
                   {navigationLinks.map((link, index) => {
                     const Icon = link.icon;
                     const isActive =
@@ -108,7 +116,10 @@ export const Header = () => {
             </PopoverContent>
           </Popover>
 
-          <NavigationMenu className="max-md:hidden">
+          <NavigationMenu className="max-md:hidden space-x-4 lg:space-x-8">
+            <SignedIn>
+              <OrganizationSwitcher />
+            </SignedIn>
             <NavigationMenuList className="gap-2">
               {navigationLinks.map((link, index) => {
                 const Icon = link.icon;
@@ -164,13 +175,7 @@ export const Header = () => {
                   </SignInButton>
                 </SignedOut>
                 <SignedIn>
-                  <UserButton
-                    appearance={{
-                      elements: {
-                        userButtonAvatarBox: "size-8",
-                      },
-                    }}
-                  />
+                  <UserButton />
                 </SignedIn>
               </>
             )}
