@@ -154,7 +154,7 @@ export const Header = () => {
         </div>
 
         {/* Middle side: Logo */}
-        <div className="flex items-center">
+        <div className="flex md:hidden xl:flex items-center">
           <a href="#" className="text-primary hover:text-primary/90">
             <Icon icon="simple-icons:nextdotjs" className="size-8" />
           </a>
