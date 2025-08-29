@@ -25,3 +25,14 @@ export const useEntryImage = () => {
     setUploading,
   };
 };
+
+export const entryDetailsFormAtom = atom<boolean>(false);
+
+export const useEntryDetailsForm = () => {
+  const [openDetails, setOpenDetails] = useAtom(entryDetailsFormAtom);
+
+  return {
+    openDetails,
+    setOpenDetails,
+  };
+};

@@ -3,6 +3,7 @@
 import { AnimatedInput } from "@/components/elements/form/animated-input";
 import Stepper, { Step } from "@/components/elements/multi-step";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { DateTimePicker } from "@/components/ui/date-picker";
 import { Icon } from "@/components/ui/icon";
 import { Input } from "@/components/ui/input";
@@ -12,6 +13,13 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { cn, formatTime } from "@/lib/utils";
 import { format } from "date-fns";
 import { useRouter } from "next/navigation";
@@ -28,6 +36,18 @@ interface ObituaryFormData {
   biographicalSummary?: string;
   hobbies?: string;
   personalInterests?: string;
+
+  // Military service
+  militaryService?: boolean;
+  militaryBranch?: string;
+  militaryYearsServed?: number;
+  militaryRank?: string;
+
+  // Religious information
+  religious?: boolean;
+  denomination?: string;
+  organization?: string;
+  favoriteScripture?: string;
 
   // Family and relationships
   familyDetails?: string;
@@ -52,6 +72,7 @@ interface Service {
   id: string;
   location: string;
   address: string;
+  type: string;
   date?: Date;
   startTime?: string;
   endTime?: string;
@@ -211,6 +232,7 @@ export const EntryDetailsForm = ({
       id: Date.now().toString(),
       location: "",
       address: "",
+      type: "Funeral",
       date: undefined,
       startTime: "",
       endTime: "",
@@ -391,27 +413,29 @@ const BiographicalDetailsStep = ({ data, onChange }: StepProps) => {
         />
       </div>
 
-      <AnimatedInput
-        label="Education"
-        name="education"
-        type="textarea"
-        controlled={true}
-        value={data.education || ""}
-        onChange={(e) => onChange({ education: e.target.value })}
-        placeholder="Schools attended, degrees earned, academic achievements..."
-        className="h-24"
-      />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <AnimatedInput
+          label="Education"
+          name="education"
+          type="textarea"
+          controlled={true}
+          value={data.education || ""}
+          onChange={(e) => onChange({ education: e.target.value })}
+          placeholder="Schools attended, degrees earned, academic achievements..."
+          className="h-24"
+        />
 
-      <AnimatedInput
-        label="Accomplishments & Achievements"
-        name="accomplishments"
-        type="textarea"
-        controlled={true}
-        value={data.accomplishments || ""}
-        onChange={(e) => onChange({ accomplishments: e.target.value })}
-        placeholder="Awards, recognitions, career highlights..."
-        className="h-24"
-      />
+        <AnimatedInput
+          label="Accomplishments & Achievements"
+          name="accomplishments"
+          type="textarea"
+          controlled={true}
+          value={data.accomplishments || ""}
+          onChange={(e) => onChange({ accomplishments: e.target.value })}
+          placeholder="Awards, recognitions, career highlights..."
+          className="h-24"
+        />
+      </div>
 
       <AnimatedInput
         label="Biographical Summary"
@@ -421,7 +445,6 @@ const BiographicalDetailsStep = ({ data, onChange }: StepProps) => {
         value={data.biographicalSummary || ""}
         onChange={(e) => onChange({ biographicalSummary: e.target.value })}
         placeholder="A brief overview of their life story, character, and what made them special..."
-        className="h-24"
       />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -433,6 +456,7 @@ const BiographicalDetailsStep = ({ data, onChange }: StepProps) => {
           value={data.hobbies || ""}
           onChange={(e) => onChange({ hobbies: e.target.value })}
           placeholder="Activities they enjoyed in their free time..."
+          className="h-16"
         />
 
         <AnimatedInput
@@ -443,7 +467,140 @@ const BiographicalDetailsStep = ({ data, onChange }: StepProps) => {
           value={data.personalInterests || ""}
           onChange={(e) => onChange({ personalInterests: e.target.value })}
           placeholder="Passions, causes they cared about, special interests..."
+          className="h-16"
         />
+      </div>
+
+      {/* Military Service Section */}
+      <div className="space-y-4 pt-4 border-t">
+        <div className="flex items-center space-x-2">
+          <Checkbox
+            id="militaryService"
+            checked={data.militaryService || false}
+            onCheckedChange={(checked) =>
+              onChange({
+                militaryService: checked as boolean,
+                // Clear military fields if unchecking
+                ...(checked
+                  ? {}
+                  : {
+                      militaryBranch: "",
+                      militaryYearsServed: undefined,
+                      militaryRank: "",
+                    }),
+              })
+            }
+          />
+          <Label
+            htmlFor="militaryService"
+            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+          >
+            Military Service?
+          </Label>
+        </div>
+
+        {data.militaryService && (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+            <AnimatedInput
+              label="Branch"
+              name="militaryBranch"
+              controlled={true}
+              value={data.militaryBranch || ""}
+              onChange={(e) => onChange({ militaryBranch: e.target.value })}
+              placeholder="e.g., Army, Navy, Air Force"
+            />
+
+            <AnimatedInput
+              label="Years Served"
+              name="militaryYearsServed"
+              controlled={true}
+              value={data.militaryYearsServed?.toString() || ""}
+              onChange={(e) => {
+                const value = e.target.value;
+                const numValue = value === "" ? undefined : parseInt(value, 10);
+                onChange({
+                  militaryYearsServed: isNaN(numValue || 0)
+                    ? undefined
+                    : numValue,
+                });
+              }}
+              placeholder="e.g., 4 (number of years)"
+            />
+
+            <AnimatedInput
+              label="Rank"
+              name="militaryRank"
+              controlled={true}
+              value={data.militaryRank || ""}
+              onChange={(e) => onChange({ militaryRank: e.target.value })}
+              placeholder="e.g., Sergeant, Lieutenant"
+            />
+          </div>
+        )}
+      </div>
+
+      {/* Religious Section */}
+      <div className="space-y-4 pt-4 border-t">
+        <div className="flex items-center space-x-2">
+          <Checkbox
+            id="religious"
+            checked={data.religious || false}
+            onCheckedChange={(checked) =>
+              onChange({
+                religious: checked as boolean,
+                // Clear religious fields if unchecking
+                ...(checked
+                  ? {}
+                  : {
+                      denomination: "",
+                      organization: "",
+                      favoriteScripture: "",
+                    }),
+              })
+            }
+          />
+          <Label
+            htmlFor="religious"
+            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+          >
+            Religious?
+          </Label>
+        </div>
+
+        {data.religious && (
+          <div className="space-y-4 mt-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <AnimatedInput
+                label="Denomination"
+                name="denomination"
+                controlled={true}
+                value={data.denomination || ""}
+                onChange={(e) => onChange({ denomination: e.target.value })}
+                placeholder="e.g., Baptist, Catholic, Methodist"
+              />
+
+              <AnimatedInput
+                label="Organization"
+                name="organization"
+                controlled={true}
+                value={data.organization || ""}
+                onChange={(e) => onChange({ organization: e.target.value })}
+                placeholder="e.g., First Baptist Church"
+              />
+            </div>
+
+            <AnimatedInput
+              label="Favorite Scripture"
+              name="favoriteScripture"
+              type="textarea"
+              controlled={true}
+              value={data.favoriteScripture || ""}
+              onChange={(e) => onChange({ favoriteScripture: e.target.value })}
+              placeholder="Enter a meaningful biblical verse or quote..."
+              className="h-24"
+            />
+          </div>
+        )}
       </div>
     </div>
   );
@@ -485,16 +642,18 @@ const FamilyRelationshipsStep = ({
         removeFamilyMember={removeFamilyMember}
       />
 
-      <AnimatedInput
-        label="Family Details"
-        name="familyDetails"
-        type="textarea"
-        controlled={true}
-        value={data.familyDetails || ""}
-        onChange={(e) => onChange({ familyDetails: e.target.value })}
-        placeholder="Any other relevant details about their family, close friends, or colleagues..."
-        className="h-24"
-      />
+      <div className="mt-8">
+        <AnimatedInput
+          label="Family Details"
+          name="familyDetails"
+          type="textarea"
+          controlled={true}
+          value={data.familyDetails || ""}
+          onChange={(e) => onChange({ familyDetails: e.target.value })}
+          placeholder="Any other relevant details about their family, close friends, or colleagues..."
+          className="h-24"
+        />
+      </div>
     </div>
   );
 };
@@ -631,6 +790,25 @@ const ServiceInputs = ({
           </div>
 
           <div className="flex items-center gap-4">
+            <Select
+              value={service.type}
+              onValueChange={(value) =>
+                updateService?.(service.id, "type", value)
+              }
+            >
+              <SelectTrigger className="shrink w-28">
+                <SelectValue placeholder="Type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Funeral">Funeral</SelectItem>
+                <SelectItem value="Wake">Wake</SelectItem>
+                <SelectItem value="Vigil">Vigil</SelectItem>
+                <SelectItem value="Memorial">Memorial</SelectItem>
+                <SelectItem value="Reception">Reception</SelectItem>
+                <SelectItem value="Other">Other</SelectItem>
+              </SelectContent>
+            </Select>
+
             <div className="flex-1">
               <Popover>
                 <PopoverTrigger asChild>
@@ -727,6 +905,7 @@ const ServiceDetailsStep = ({
         value={data.donationRequests || ""}
         onChange={(e) => onChange({ donationRequests: e.target.value })}
         placeholder="Preferred charities or causes for donations in lieu of flowers..."
+        className="h-24"
       />
 
       <AnimatedInput
@@ -737,6 +916,7 @@ const ServiceDetailsStep = ({
         value={data.specialAcknowledgments || ""}
         onChange={(e) => onChange({ specialAcknowledgments: e.target.value })}
         placeholder="Thank you messages, special mentions to caregivers, friends, or organizations..."
+        className="h-24"
       />
 
       <AnimatedInput

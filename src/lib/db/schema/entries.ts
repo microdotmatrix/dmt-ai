@@ -1,6 +1,6 @@
 import { pgTable } from "@/lib/db/utils";
 import { relations } from "drizzle-orm";
-import { text, timestamp } from "drizzle-orm/pg-core";
+import { boolean, integer, text, timestamp } from "drizzle-orm/pg-core";
 import { UserTable } from "./users";
 
 export const EntryTable = pgTable("entry", {
@@ -56,6 +56,18 @@ export const EntryDetailsTable = pgTable("entry_details", {
   // Personal details
   hobbies: text("hobbies"), // Hobbies and interests
   personalInterests: text("personal_interests"),
+
+  // Military service
+  militaryService: boolean("military_service"),
+  militaryBranch: text("military_branch"),
+  militaryRank: text("military_rank"),
+  militaryYearsServed: integer("military_years_served"),
+
+  // Religious information
+  religious: boolean("religious"),
+  denomination: text("denomination"),
+  organization: text("organization"),
+  favoriteScripture: text("favorite_scripture"),
 
   // Family and relationships
   familyDetails: text("family_details"), // Spouse, children, parents, siblings

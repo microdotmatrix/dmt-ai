@@ -8,6 +8,20 @@
       "when": 1756355475688,
       "tag": "0000_premium_scalphunter",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1756483659401,
+      "tag": "0001_skinny_morph",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1756485446359,
+      "tag": "0002_military_nocturne",
+      "breakpoints": true
     }
   ]
 }

@@ -12,7 +12,7 @@ import {
 import { Icon } from "@/components/ui/icon";
 import { updateEntryDetailsDirectAction } from "@/lib/db/actions/entries";
 import { Entry } from "@/lib/db/schema";
-import { useState } from "react";
+import { useEntryDetailsForm } from "@/lib/state";
 import { EntryDetailsForm } from "./details-form";
 
 export const EntryDetailsDialog = ({
@@ -22,15 +22,15 @@ export const EntryDetailsDialog = ({
   entry: Entry;
   initialData?: any;
 }) => {
-  const [open, setOpen] = useState(false);
+  const { openDetails, setOpenDetails } = useEntryDetailsForm();
 
   const handleObituarySubmit = async (data: any) => {
     await updateEntryDetailsDirectAction(entry.id, data);
-    setOpen(false);
+    setOpenDetails(true);
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={openDetails} onOpenChange={setOpenDetails}>
       <DialogTrigger asChild>
         <Button className="w-full">
           <Icon

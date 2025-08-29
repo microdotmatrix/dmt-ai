@@ -56,6 +56,7 @@ const formatServices = (data: string | null | undefined): string => {
         .map((service) => {
           const location = service.location;
           const address = service.address ? ` at ${service.address}` : "";
+          const type = service.type ? `${service.type}: ` : "";
 
           let dateTimeInfo = "";
           if (service.date) {
@@ -73,7 +74,7 @@ const formatServices = (data: string | null | undefined): string => {
             dateTimeInfo = ` on ${date}${timeRange ? ` at ${timeRange}` : ""}`;
           }
 
-          return `${location}${address}${dateTimeInfo}`;
+          return `${type}${location}${address}${dateTimeInfo}`;
         })
         .join("\n");
     }
@@ -183,6 +184,14 @@ const EntryEditContent = async ({
                     entryDetails.biographicalSummary,
                     entryDetails.hobbies,
                     entryDetails.personalInterests,
+                    entryDetails.militaryService,
+                    entryDetails.militaryBranch,
+                    entryDetails.militaryRank,
+                    entryDetails.militaryYearsServed,
+                    entryDetails.religious,
+                    entryDetails.denomination,
+                    entryDetails.organization,
+                    entryDetails.favoriteScripture,
                     entryDetails.familyDetails,
                     entryDetails.survivedBy,
                     entryDetails.precededBy,
@@ -190,7 +199,7 @@ const EntryEditContent = async ({
                     entryDetails.donationRequests,
                     entryDetails.specialAcknowledgments,
                     entryDetails.additionalNotes,
-                  ].some((value) => value && value.trim() !== "") ? (
+                  ].some((value) => value && (typeof value === 'string' ? value.trim() !== "" : value !== null)) ? (
                     <>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {/* Left Column - Professional & Personal */}
@@ -273,6 +282,90 @@ const EntryEditContent = async ({
                               <p className="text-sm mt-1 whitespace-pre-wrap">
                                 {entryDetails.personalInterests}
                               </p>
+                            </div>
+                          )}
+                          
+                          {/* Military Service Section */}
+                          {entryDetails.militaryService && (
+                            <div className="space-y-3 pt-3 border-t">
+                              <div>
+                                <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                                  Military Service
+                                </span>
+                                <p className="text-sm mt-1">Yes</p>
+                              </div>
+                              {entryDetails.militaryBranch && (
+                                <div>
+                                  <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                                    Branch
+                                  </span>
+                                  <p className="text-sm mt-1">
+                                    {entryDetails.militaryBranch}
+                                  </p>
+                                </div>
+                              )}
+                              {entryDetails.militaryRank && (
+                                <div>
+                                  <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                                    Rank
+                                  </span>
+                                  <p className="text-sm mt-1">
+                                    {entryDetails.militaryRank}
+                                  </p>
+                                </div>
+                              )}
+                              {entryDetails.militaryYearsServed && (
+                                <div>
+                                  <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                                    Years Served
+                                  </span>
+                                  <p className="text-sm mt-1">
+                                    {entryDetails.militaryYearsServed} {entryDetails.militaryYearsServed === 1 ? 'year' : 'years'}
+                                  </p>
+                                </div>
+                              )}
+                            </div>
+                          )}
+                          
+                          {/* Religious Section */}
+                          {entryDetails.religious && (
+                            <div className="space-y-3 pt-3 border-t">
+                              <div>
+                                <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                                  Religious
+                                </span>
+                                <p className="text-sm mt-1">Yes</p>
+                              </div>
+                              {entryDetails.denomination && (
+                                <div>
+                                  <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                                    Denomination
+                                  </span>
+                                  <p className="text-sm mt-1">
+                                    {entryDetails.denomination}
+                                  </p>
+                                </div>
+                              )}
+                              {entryDetails.organization && (
+                                <div>
+                                  <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                                    Organization
+                                  </span>
+                                  <p className="text-sm mt-1">
+                                    {entryDetails.organization}
+                                  </p>
+                                </div>
+                              )}
+                              {entryDetails.favoriteScripture && (
+                                <div>
+                                  <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                                    Favorite Scripture
+                                  </span>
+                                  <p className="text-sm mt-1 whitespace-pre-wrap italic">
+                                    "{entryDetails.favoriteScripture}"
+                                  </p>
+                                </div>
+                              )}
                             </div>
                           )}
                         </div>
@@ -462,7 +555,7 @@ const EntryEditContent = async ({
                     </div>
                     <div className="border-t pt-3">
                       <Link
-                        href={`/${entry.id}/obituaries/new`}
+                        href={`/${entry.id}/obituaries/create`}
                         className={buttonVariants({
                           variant: "outline",
                           size: "sm",
@@ -480,7 +573,7 @@ const EntryEditContent = async ({
                       No obituaries generated yet.
                     </p>
                     <Link
-                      href={`/${entry.id}/obituaries/new`}
+                      href={`/${entry.id}/obituaries/create`}
                       className={buttonVariants({
                         variant: "outline",
                         size: "sm",
