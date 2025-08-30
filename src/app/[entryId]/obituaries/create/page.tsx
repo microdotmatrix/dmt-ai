@@ -1,4 +1,5 @@
-import { EntryDetailsDialog } from "@/components/sections/entries/details-dialog";
+import { EntryDetailsCard } from "@/components/sections/entries/details-card";
+import { EntryCard } from "@/components/sections/entries/entry-card";
 import { ObituaryOptions } from "@/components/sections/obituaries/options";
 import { getEntryById, getEntryDetailsById } from "@/lib/db/queries/entries";
 import { notFound } from "next/navigation";
@@ -34,13 +35,8 @@ const ObituaryCreateContent = async ({ entryId }: { entryId: string }) => {
     <main>
       <div className="max-w-6xl mx-auto py-8">
         <p>Generate an obituary for {entry.name}</p>
-        <pre className="text-xs whitespace-pre-wrap">
-          {JSON.stringify(entry, null, 2)}
-        </pre>
-        <pre className="text-xs whitespace-pre-wrap">
-          {JSON.stringify(entryDetails, null, 2)}
-        </pre>
-        <EntryDetailsDialog entry={entry} initialData={entryDetails} />
+        <EntryCard entry={entry} />
+        <EntryDetailsCard entry={entry} entryDetails={entryDetails!} />
 
         <ObituaryOptions />
       </div>

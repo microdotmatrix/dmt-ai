@@ -99,4 +99,4 @@ export const EntryDetailsRelations = relations(
 );
 
 export type Entry = typeof EntryTable.$inferSelect;
-export type ObituaryDetails = typeof EntryDetailsTable.$inferSelect;
+export type EntryDetails = typeof EntryDetailsTable.$inferSelect;

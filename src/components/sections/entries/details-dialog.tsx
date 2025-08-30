@@ -32,7 +32,7 @@ export const EntryDetailsDialog = ({
   return (
     <Dialog open={openDetails} onOpenChange={setOpenDetails}>
       <DialogTrigger asChild>
-        <Button className="w-full">
+        <Button className="w-fit">
           <Icon
             icon={
               initialData && Object.keys(initialData).length > 0
@@ -42,8 +42,8 @@ export const EntryDetailsDialog = ({
             className="w-4 h-4 mr-2"
           />
           {initialData && Object.keys(initialData).length > 0
-            ? "Edit Obituary Details"
-            : "Add Obituary Details"}
+            ? "Edit Details"
+            : "Add Details"}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-4xl max-h-[90vh] h-full overflow-y-auto p-0">

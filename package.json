@@ -33,6 +33,7 @@
     "@react-email/components": "^0.5.1",
     "@t3-oss/env-nextjs": "^0.13.8",
     "@uploadthing/react": "^7.3.3",
+    "@vercel/blob": "^1.1.1",
     "ai": "^5.0.26",
     "babel-plugin-react-compiler": "19.1.0-rc.2",
     "class-variance-authority": "^0.7.1",
