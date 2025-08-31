@@ -1,6 +1,6 @@
 {
-  "id": "669d0257-d1cc-44a4-bbb2-3ce743bdc3c0",
-  "prevId": "d01e87fd-f294-458c-a7e8-37e1a1cc6a07",
+  "id": "4df66907-19e1-4260-9e91-abf844951983",
+  "prevId": "4681ceea-3bb9-47e8-9f04-749b4846bc33",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -80,6 +80,12 @@
           "primaryKey": false,
           "notNull": true
         },
+        "entry_id": {
+          "name": "entry_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
         "title": {
           "name": "title",
           "type": "text",
@@ -98,6 +104,13 @@
           "primaryKey": false,
           "notNull": true,
           "default": "'obituary'"
+        },
+        "token_usage": {
+          "name": "token_usage",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "default": 0
         },
         "created_at": {
           "name": "created_at",
@@ -119,6 +132,19 @@
             "id"
           ],
           "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "dmai2_document_entry_id_dmai2_entry_id_fk": {
+          "name": "dmai2_document_entry_id_dmai2_entry_id_fk",
+          "tableFrom": "dmai2_document",
+          "tableTo": "dmai2_entry",
+          "columnsFrom": [
+            "entry_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },

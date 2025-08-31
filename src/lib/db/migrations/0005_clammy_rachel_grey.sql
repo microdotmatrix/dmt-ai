@@ -1,0 +1,2 @@
+ALTER TABLE "dmai2_document" ADD COLUMN "entry_id" text NOT NULL;--> statement-breakpoint
+ALTER TABLE "dmai2_document" ADD CONSTRAINT "dmai2_document_entry_id_dmai2_entry_id_fk" FOREIGN KEY ("entry_id") REFERENCES "public"."dmai2_entry"("id") ON DELETE no action ON UPDATE no action;

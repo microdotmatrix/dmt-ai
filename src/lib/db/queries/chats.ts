@@ -23,11 +23,13 @@ import {
 export const saveChat = async ({
   id,
   userId,
+  entryId,
   title,
   visibility,
 }: {
   id: string;
   userId: string;
+  entryId: string;
   title: string;
   visibility: "private" | "public";
 }) => {
@@ -36,6 +38,7 @@ export const saveChat = async ({
       id,
       createdAt: new Date(),
       userId,
+      entryId,
       title,
       visibility,
     });

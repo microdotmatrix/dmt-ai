@@ -1,0 +1,159 @@
+import { getEntryById, getEntryDetailsById } from "../db/queries/entries";
+import { formatFamilyMembers, formatServices } from "../helpers";
+
+export const systemPrompt = `
+  You are an compassionate and eloquent obituary writer. Your task is to write a respectful and heartfelt obituary based on the provided information.
+
+  OBITUARY GENERATION GUIDELINES:\n
+  - Write a complete obituary using the desired tone specified in the user's prompt. If the user doesn't specify a tone, use a reverent tone by default.\n
+  - Use ALL the information provided in the user's request\n
+  - Use a minimum of 200 words and a maximum of 400 words\n
+  - Include proper obituary structure (announcement of death, life details, survivors, etc.)\n
+  - Make it flow naturally and read beautifully\n
+  - Honor their memory appropriately\n
+  - Focus on celebrating the person's life, contributions, and legacy\n
+  - Ensure the language is dignified and appropriate\n
+  - Include a starting sentence and ending sentiment (e.g. "They will be dearly missed")\n
+  - Do not add any information not provided in the user's request\n\n
+
+  FORMAT GUIDELINES:\n
+  - Use markdown to format the obituary text.\n
+  - Utilize markdown headers to create a clear and organized structure.\n
+  - Use markdown bold and italic formatting to highlight important information.\n
+  - Use markdown lists to create a clear and organized structure.\n
+  - Use markdown links to format any URLs or web addresses passed into the user's prompt into clickable links.\n
+  - Use markdown blockquotes to format any quotes, scriptures, or citations.\n\n
+
+  IMPORTANT RESTRICTIONS:\n
+  - ONLY USE THE INFORMATION PROVIDED IN THE PROMPT\n
+  - DO NOT ADD ANY ADDITIONAL INFORMATION OR DETAILS THAT ARE NOT PROVIDED\n
+  - If the user provides a name that is similar to a known public figure or existing person, do not use any additional information about that person\n\n
+`;
+
+export const createPromptFromEntryData = async (
+  entryId: string,
+  style: string,
+  tone: string,
+  toInclude: string = "",
+  toAvoid: string = "",
+  isReligious: boolean = false
+) => {
+  const [entry, entryDetails] = await Promise.all([
+    getEntryById(entryId),
+    getEntryDetailsById(entryId),
+  ]);
+
+  if (!entry || !entryDetails) {
+    throw new Error("Entry not found");
+  }
+
+  let promptText = `
+    Generate a ${style} obituary for the following person, using a ${tone} tone:\n\n
+
+    Name: ${entry.name}\n\n
+    Date of Birth: ${entry.dateOfBirth}\n
+    Date of Death: ${entry.dateOfDeath}\n
+    Location of Birth: ${entry.locationBorn}\n
+    Location of Death: ${entry.locationDied}\n
+    Cause of Death: ${entry.causeOfDeath}\n\n
+    
+    Biographical Info:\n
+    ${entryDetails.occupation && "Occupation: " + entryDetails.occupation}\n
+    ${entryDetails.jobTitle && "Job Title: " + entryDetails.jobTitle}\n
+    ${entryDetails.companyName && "Company Name: " + entryDetails.companyName}\n
+    ${entryDetails.yearsWorked && "Years Worked: " + entryDetails.yearsWorked}\n
+    ${entryDetails.education && "Education: " + entryDetails.education}\n
+    ${
+      entryDetails.accomplishments &&
+      "Accomplishments: " + entryDetails.accomplishments
+    }\n
+    ${entryDetails.hobbies && "Hobbies: " + entryDetails.hobbies}\n
+    ${
+      entryDetails.personalInterests &&
+      "Interests: " + entryDetails.personalInterests
+    }\n\n
+    
+    ${
+      entryDetails.religious &&
+      "Religious Information:" + `\n` + entryDetails.religious &&
+      "Is Religious?: " +
+        entryDetails.religious +
+        `\n` +
+        entryDetails.denomination &&
+      "Denomination: " +
+        entryDetails.denomination +
+        `\n` +
+        entryDetails.organization &&
+      "Organization: " +
+        entryDetails.organization +
+        `\n` +
+        entryDetails.favoriteScripture &&
+      "Favorite Scripture: " + entryDetails.favoriteScripture + `\n\n`
+    }
+
+    ${
+      isReligious
+        ? "Please INCLUDE religious themes in the obituary text. Use the information provided above about the person's denomination and favorite scripture to inform your response."
+        : "Please AVOID using religious themes in the obituary text. You may mention the person's denomination and favorite scripture if provided above, but avoid using religious language or themes that are not appropriate for the context."
+    }\n\n
+
+    ${
+      entryDetails.militaryService &&
+      "Military Service:" + `\n` + entryDetails.militaryBranch &&
+      "Military Branch: " +
+        entryDetails.militaryBranch +
+        `\n` +
+        entryDetails.militaryRank &&
+      "Military Rank: " +
+        entryDetails.militaryRank +
+        `\n` +
+        entryDetails.militaryYearsServed &&
+      "Military Years Served: " + entryDetails.militaryYearsServed + `\n\n`
+    }
+
+    Family Info:\n
+    ${
+      entryDetails.survivedBy &&
+      "Survived By: " + formatFamilyMembers(entryDetails.survivedBy)
+    }\n
+    ${
+      entryDetails.precededBy &&
+      "Preceded By: " + formatFamilyMembers(entryDetails.precededBy)
+    }\n
+    ${
+      entryDetails.familyDetails &&
+      "Family Details: " + entryDetails.familyDetails
+    }\n\n
+
+    Additional Details:\n
+    ${
+      entryDetails.serviceDetails &&
+      "Funeral Service(s):" + formatServices(entryDetails.serviceDetails)
+    }\n\n
+    
+    ${
+      entryDetails.donationRequests &&
+      "Donation Requests: " + entryDetails.donationRequests
+    }\n
+    ${
+      entryDetails.specialAcknowledgments &&
+      "Special Acknowledgments: " + entryDetails.specialAcknowledgments
+    }\n
+    ${
+      entryDetails.additionalNotes &&
+      "Additional Notes: " + entryDetails.additionalNotes
+    }\n\n
+
+    ${
+      toInclude &&
+      "Specific details, topics or themes to INCLUDE in this obituary: " +
+        toInclude
+    }\n\n
+    ${
+      toAvoid &&
+      "Specific details, topics or themes to AVOID in this obituary: " + toAvoid
+    }\n\n
+  `;
+
+  return promptText as string;
+};

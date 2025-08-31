@@ -1,3 +1,5 @@
+import { Response } from "@/components/ai/response";
+import { getDocumentById } from "@/lib/db/queries/documents";
 import { getEntryById } from "@/lib/db/queries/entries";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
@@ -31,10 +33,16 @@ const ObituaryPageContent = async ({
     notFound();
   }
 
+  const document = await getDocumentById(id);
+
+  if (!document) {
+    notFound();
+  }
+
   return (
-    <main>
-      <p>{entry.name}</p>
-      <p>Obituary {id} content</p>
-    </main>
+    <div className="max-w-6xl mx-auto">
+      <p>{document.title}</p>
+      <Response key={document.id}>{document.content}</Response>
+    </div>
   );
 };

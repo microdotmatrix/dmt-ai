@@ -5,23 +5,32 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
+import { Entry, EntryDetails } from "@/lib/db/schema";
 import { entryDetailsFormAtom } from "@/lib/state";
 import { useSetAtom } from "jotai";
-import { useState } from "react";
 
-export const ObituaryOptions = () => {
+export const ObituaryOptions = ({
+  tone,
+  style,
+  toInclude,
+  toAvoid,
+  isReligious,
+  completed,
+  isPending,
+  handleInputChange,
+}: {
+  entry: Entry;
+  entryDetails: EntryDetails;
+  tone: string;
+  style: string;
+  toInclude: string;
+  toAvoid: string;
+  isReligious: boolean;
+  completed: boolean;
+  isPending: boolean;
+  handleInputChange: (field: string, value: string) => void;
+}) => {
   const setOpenDetails = useSetAtom(entryDetailsFormAtom);
-  const [tone, setTone] = useState("reverent");
-  const [style, setStyle] = useState("modern");
-  const [isReligious, setIsReligious] = useState(false);
-
-  const handleInputChange = (field: string, value: string) => {
-    if (field === "tone") {
-      setTone(value);
-    } else if (field === "style") {
-      setStyle(value);
-    }
-  };
 
   const toneOptions = [
     {
@@ -56,8 +65,9 @@ export const ObituaryOptions = () => {
       description: "Motivational and encouraging",
     },
   ];
+
   return (
-    <form className="space-y-6">
+    <>
       <div>
         <Label htmlFor="style">Style</Label>
         <RadioGroup
@@ -118,7 +128,8 @@ export const ObituaryOptions = () => {
             label="Things to Include"
             type="textarea"
             controlled={true}
-            defaultValue=""
+            value={toInclude}
+            onChange={(e) => handleInputChange("toInclude", e.target.value)}
             placeholder="Any specific topics or themes to include in the obituary..."
             className="h-16"
           />
@@ -127,7 +138,8 @@ export const ObituaryOptions = () => {
             label="Things to Avoid"
             type="textarea"
             controlled={true}
-            defaultValue=""
+            value={toAvoid}
+            onChange={(e) => handleInputChange("toAvoid", e.target.value)}
             placeholder="Any specific topics or themes to avoid mentioning in the obituary..."
             className="h-16"
           />
@@ -137,7 +149,9 @@ export const ObituaryOptions = () => {
         <Checkbox
           id="isReligious"
           defaultChecked={isReligious || false}
-          onCheckedChange={(checked) => setIsReligious(checked as boolean)}
+          onCheckedChange={(checked) =>
+            handleInputChange("isReligious", checked ? "true" : "false")
+          }
         />
         <Label
           htmlFor="isReligious"
@@ -161,6 +175,6 @@ export const ObituaryOptions = () => {
           </span>
         </Label>
       </section>
-    </form>
+    </>
   );
 };

@@ -6,6 +6,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Icon } from "@/components/ui/icon";
 import { getEntryImages } from "@/lib/db/actions/images";
+import { getDocumentsByEntryId } from "@/lib/db/queries/documents";
 import { getEntryById, getEntryDetailsById } from "@/lib/db/queries/entries";
 import { format } from "date-fns";
 import Link from "next/link";
@@ -25,11 +26,9 @@ export default async function EntryEditPage({ params }: PageProps) {
   }
 
   // Fetch obituaries for this deceased person
-  // const obituaries = await getObituariesByDeceasedId(entryId);
-  const obituaries: any[] = [];
+  const obituaries = await getDocumentsByEntryId(entryId);
 
   // Fetch generated images for this deceased person
-  // const generatedImages = await getGeneratedImagesByDeceasedId(entryId);
   const generatedImages: any[] = [];
 
   return (
@@ -138,7 +137,7 @@ const EntryEditContent = async ({
                           <div className="flex items-start justify-between gap-2">
                             <div className="flex-1 min-w-0">
                               <h4 className="font-medium text-sm truncate">
-                                {obituary.fullName}
+                                {obituary.title}
                               </h4>
                               <p className="text-xs text-muted-foreground">
                                 {format(
@@ -147,7 +146,7 @@ const EntryEditContent = async ({
                                 )}
                               </p>
                               <p className="text-xs text-muted-foreground mt-1 line-clamp-2">
-                                {obituary.generatedText.substring(0, 100)}...
+                                {obituary.content.substring(0, 100)}...
                               </p>
                             </div>
                             <Link

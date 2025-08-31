@@ -1,3 +1,5 @@
+import { formatTime } from "./utils";
+
 // Helper function to format family members for display
 export const formatFamilyMembers = (
   data: string | null | undefined
@@ -20,18 +22,6 @@ export const formatFamilyMembers = (
   return data;
 };
 
-// Helper function to convert 24-hour time to 12-hour AM/PM format
-export const formatTimeToAMPM = (time: string): string => {
-  if (!time) return "";
-
-  const [hours, minutes] = time.split(":");
-  const hour24 = parseInt(hours, 10);
-  const hour12 = hour24 === 0 ? 12 : hour24 > 12 ? hour24 - 12 : hour24;
-  const ampm = hour24 >= 12 ? "PM" : "AM";
-
-  return `${hour12}:${minutes} ${ampm}`;
-};
-
 // Helper function to format services for display
 export const formatServices = (data: string | null | undefined): string => {
   if (!data || data.trim() === "") return "";
@@ -51,13 +41,13 @@ export const formatServices = (data: string | null | undefined): string => {
             const date = new Date(service.date).toLocaleDateString();
             const timeRange =
               service.startTime && service.endTime
-                ? `${formatTimeToAMPM(service.startTime)} - ${formatTimeToAMPM(
+                ? `${formatTime(service.startTime)} - ${formatTime(
                     service.endTime
                   )}`
                 : service.startTime
-                ? formatTimeToAMPM(service.startTime)
+                ? formatTime(service.startTime)
                 : service.endTime
-                ? `until ${formatTimeToAMPM(service.endTime)}`
+                ? `until ${formatTime(service.endTime)}`
                 : "";
             dateTimeInfo = ` on ${date}${timeRange ? ` at ${timeRange}` : ""}`;
           }

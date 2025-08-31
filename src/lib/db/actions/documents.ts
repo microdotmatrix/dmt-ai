@@ -6,14 +6,18 @@ import "server-only";
 export const saveDocument = async ({
   id,
   title,
+  entryId,
   content,
   kind,
+  tokenUsage,
   userId,
 }: {
   id: string;
   title: string;
+  entryId: string;
   content: string;
   kind: "obituary" | "eulogy";
+  tokenUsage: number | undefined;
   userId: string;
 }) => {
   try {
@@ -22,8 +26,10 @@ export const saveDocument = async ({
       .values({
         id,
         title,
+        entryId,
         content,
         kind,
+        tokenUsage,
         userId,
       })
       .returning();

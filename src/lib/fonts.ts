@@ -1,12 +1,11 @@
 import {
   Space_Mono as Code,
-  Days_One as Display,
+  Montserrat as Display,
   Figtree as Text,
 } from "next/font/google";
 
 export const display = Display({
   subsets: ["latin"],
-  weight: ["400"],
   variable: "--display-family",
 });
 

@@ -2,6 +2,7 @@ import { relations } from "drizzle-orm";
 import {
   boolean,
   foreignKey,
+  integer,
   json,
   primaryKey,
   text,
@@ -10,6 +11,7 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 import { pgTable } from "../utils";
+import { EntryTable } from "./entries";
 import { UserTable } from "./users";
 
 export const ChatTable = pgTable("chat", {
@@ -18,6 +20,9 @@ export const ChatTable = pgTable("chat", {
   userId: text("user_id")
     .notNull()
     .references(() => UserTable.id, { onDelete: "cascade" }),
+  entryId: text("entry_id")
+    .notNull()
+    .references(() => EntryTable.id, { onDelete: "cascade" }),
   createdAt: timestamp("created_at")
     .$defaultFn(() => new Date())
     .notNull(),
@@ -30,6 +35,10 @@ export const ChatRelations = relations(ChatTable, ({ one }) => ({
   user: one(UserTable, {
     fields: [ChatTable.userId],
     references: [UserTable.id],
+  }),
+  entry: one(EntryTable, {
+    fields: [ChatTable.entryId],
+    references: [EntryTable.id],
   }),
 }));
 
@@ -56,7 +65,6 @@ export const MessageRelations = relations(MessageTable, ({ one }) => ({
 export const VoteTable = pgTable(
   "vote",
   {
-    id: uuid("id").primaryKey().notNull().defaultRandom(),
     chatId: uuid("chat_id")
       .notNull()
       .references(() => ChatTable.id),
@@ -82,17 +90,21 @@ export const VoteRelations = relations(VoteTable, ({ one }) => ({
 }));
 
 export const DocumentTable = pgTable(
-  "document_v2",
+  "document",
   {
-    id: uuid("id").primaryKey().notNull().defaultRandom(),
+    id: uuid("id").notNull().defaultRandom(),
     userId: text("user_id")
       .notNull()
       .references(() => UserTable.id),
+    entryId: text("entry_id")
+      .notNull()
+      .references(() => EntryTable.id, { onDelete: "cascade" }),
     title: text("title").notNull(),
     content: text("content"),
     kind: varchar("kind", { enum: ["obituary", "eulogy"] })
       .notNull()
       .default("obituary"),
+    tokenUsage: integer("token_usage").default(0),
     createdAt: timestamp("created_at")
       .$defaultFn(() => new Date())
       .notNull(),
@@ -106,6 +118,10 @@ export const DocumentRelations = relations(DocumentTable, ({ one }) => ({
   user: one(UserTable, {
     fields: [DocumentTable.userId],
     references: [UserTable.id],
+  }),
+  entry: one(EntryTable, {
+    fields: [DocumentTable.entryId],
+    references: [EntryTable.id],
   }),
 }));
 

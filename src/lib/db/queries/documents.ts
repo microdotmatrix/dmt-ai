@@ -2,15 +2,15 @@ import "server-only";
 
 import { db } from "@/lib/db";
 import { DocumentTable } from "@/lib/db/schema";
-import { asc, eq } from "drizzle-orm";
+import { asc, desc, eq } from "drizzle-orm";
 
-export const getDocumentsById = async (id: string) => {
+export const getDocumentsByEntryId = async (entryId: string) => {
   try {
     const documents = await db
       .select()
       .from(DocumentTable)
-      .where(eq(DocumentTable.id, id))
-      .orderBy(asc(DocumentTable.createdAt));
+      .where(eq(DocumentTable.entryId, entryId))
+      .orderBy(desc(DocumentTable.createdAt));
 
     return documents;
   } catch (error) {
