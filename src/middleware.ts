@@ -13,7 +13,7 @@ const isPublicRoute = createRouteMatcher([
 const DEV = process.env.NODE_ENV === "development";
 
 export default clerkMiddleware(async (auth, req) => {
-  const decision = await aj.protect(req, { requested: 5 }); // Deduct 5 tokens from the bucket
+  const decision = await aj.protect({ ...req, headers: req.headers }); // Deduct 5 tokens from the bucket
   // console.log("Arcjet decision", decision);
 
   if (!DEV && decision.isDenied()) {
