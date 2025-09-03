@@ -198,6 +198,33 @@ export const getChatByDocumentId = async ({
   }
 };
 
+export const getChatByDocumentId = async ({ 
+  documentId, 
+  documentCreatedAt, 
+  userId 
+}: { 
+  documentId: string; 
+  documentCreatedAt: Date;
+  userId: string; 
+}) => {
+  try {
+    const [selectedChat] = await db
+      .select()
+      .from(ChatTable)
+      .where(and(
+        eq(ChatTable.documentId, documentId),
+        eq(ChatTable.documentCreatedAt, documentCreatedAt),
+        eq(ChatTable.userId, userId)
+      ))
+      .orderBy(desc(ChatTable.createdAt))
+      .limit(1);
+    return selectedChat;
+  } catch (error) {
+    console.error("Error in getChatByDocumentId:", error);
+    throw new Error(`Failed to get chat by document id: ${error instanceof Error ? error.message : String(error)}`);
+  }
+};
+
 export const saveMessages = async ({
   messages,
 }: {

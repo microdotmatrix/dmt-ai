@@ -6,6 +6,7 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 <<<<<<< HEAD
+<<<<<<< HEAD
 import {
   getChatByDocumentId,
   getMessagesByChatId,
@@ -13,6 +14,9 @@ import {
 =======
 import { getChatByEntryId, getMessagesByChatId } from "@/lib/db/queries/chats";
 >>>>>>> f697123 (feat: add obituary chat sidebar and document management features)
+=======
+import { getChatByDocumentId, getMessagesByChatId } from "@/lib/db/queries/chats";
+>>>>>>> 859b3cb (feat: add document reference to chat schema and update related queries)
 import { getDocumentById } from "@/lib/db/queries/documents";
 import { getEntryById } from "@/lib/db/queries/entries";
 import { auth } from "@clerk/nextjs/server";
@@ -34,6 +38,7 @@ export default async function ObituaryPage({ params }: PageProps) {
   const document = await getDocumentById(id);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
   const existingChat = await getChatByDocumentId({
     documentId: document.id,
     documentCreatedAt: document.createdAt,
@@ -41,6 +46,11 @@ export default async function ObituaryPage({ params }: PageProps) {
   const existingChat = await getChatByEntryId({
     entryId: document.entryId,
 >>>>>>> f697123 (feat: add obituary chat sidebar and document management features)
+=======
+  const existingChat = await getChatByDocumentId({
+    documentId: document.id,
+    documentCreatedAt: document.createdAt,
+>>>>>>> 859b3cb (feat: add document reference to chat schema and update related queries)
     userId: userId!,
   });
 
