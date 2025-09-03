@@ -20,7 +20,11 @@ export default async function ObituaryCreatePage({ params }: PageProps) {
           href={`/${entryId}`}
           className={buttonVariants({ variant: "outline", size: "sm" })}
         >
+<<<<<<< HEAD
           <Icon icon="mdi:arrow-left" className="size-4 mr-2" />
+=======
+          <Icon icon="mdi:arrow-left" className="w-4 h-4 mr-2" />
+>>>>>>> f697123 (feat: add obituary chat sidebar and document management features)
           Back to Entry
         </Link>
       </div>

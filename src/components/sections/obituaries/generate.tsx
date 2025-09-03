@@ -102,7 +102,11 @@ export const GenerateObituary = ({
   };
   return (
     <div className="grid lg:grid-cols-6 gap-4 px-4 lg:px-8">
+<<<<<<< HEAD
       <aside className="lg:col-span-2 space-y-4">
+=======
+      <aside className="col-span-2">
+>>>>>>> f697123 (feat: add obituary chat sidebar and document management features)
         <EntryCard entry={entry} />
         <EntryDetailsCard entry={entry} entryDetails={entryDetails!} />
 

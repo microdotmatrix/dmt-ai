@@ -56,8 +56,11 @@ export async function POST(request: NextRequest) {
       id,
       userId,
       entryId: document.entryId,
+<<<<<<< HEAD
       documentId: document.id,
       documentCreatedAt: document.createdAt,
+=======
+>>>>>>> f697123 (feat: add obituary chat sidebar and document management features)
       title,
       visibility,
     });

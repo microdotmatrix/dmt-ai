@@ -165,6 +165,7 @@ export const getChatByEntryId = async ({ entryId, userId }: { entryId: string; u
   } catch (error) {
     console.error("Error in getChatByEntryId:", error);
     throw new Error(`Failed to get chat by entry id: ${error instanceof Error ? error.message : String(error)}`);
+<<<<<<< HEAD
   }
 };
 
@@ -192,6 +193,8 @@ export const getChatByDocumentId = async ({
   } catch (error) {
     console.error("Error in getChatByDocumentId:", error);
     throw new Error(`Failed to get chat by document id: ${error instanceof Error ? error.message : String(error)}`);
+=======
+>>>>>>> f697123 (feat: add obituary chat sidebar and document management features)
   }
 };
 

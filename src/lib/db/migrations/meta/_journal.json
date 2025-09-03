@@ -64,6 +64,7 @@
       "when": 1756794143584,
       "tag": "0008_groovy_magus",
       "breakpoints": true
+<<<<<<< HEAD
     },
     {
       "idx": 9,
@@ -78,6 +79,8 @@
       "when": 1756858479384,
       "tag": "0010_peaceful_hairball",
       "breakpoints": true
+=======
+>>>>>>> f697123 (feat: add obituary chat sidebar and document management features)
     }
   ]
 }
