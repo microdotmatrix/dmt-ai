@@ -297,7 +297,7 @@ const EntryEditContent = async ({
                         View All
                       </Link>
                       <Link
-                        href={`/${entry.id}/images/new`}
+                        href={`/${entry.id}/images/create`}
                         className={buttonVariants({
                           variant: "outline",
                           size: "sm",
@@ -315,7 +315,7 @@ const EntryEditContent = async ({
                       No memorial images created yet.
                     </p>
                     <Link
-                      href={`/${entry.id}/images/new`}
+                      href={`/${entry.id}/images/create`}
                       className={buttonVariants({
                         variant: "outline",
                         size: "sm",

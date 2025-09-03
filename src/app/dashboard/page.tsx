@@ -7,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Icon } from "@/components/ui/icon";
 import { upsertUser } from "@/lib/auth/actions";
 import { deleteEntryAction } from "@/lib/db/actions/entries";
+import { getDocumentsByEntryId } from "@/lib/db/queries/documents";
 import { getCreatorEntries, getUserUploads } from "@/lib/db/queries/entries";
 import { Entry } from "@/lib/db/schema";
 import { auth } from "@clerk/nextjs/server";
@@ -65,12 +66,14 @@ const PageContent = async () => {
 
   let featuredEntryStats = null;
   if (featuredEntry) {
+    const obituaries = await getDocumentsByEntryId(featuredEntry.id);
+
     // const [obituaries, generatedImages] = await Promise.all([
     //   getObituariesByDeceasedId(featuredEntry.id),
     //   getGeneratedImagesByDeceasedId(featuredEntry.id),
     // ]);
     featuredEntryStats = {
-      obituariesCount: 0,
+      obituariesCount: obituaries.length,
       imagesCount: 0,
     };
   }
@@ -92,7 +95,7 @@ const PageContent = async () => {
     <div className="space-y-8 px-4 lg:px-8">
       {/* Header */}
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold">Dashboard</h1>
+        <h1 className="text-2xl font-bold">Dashboard</h1>
         <CreatePortal />
       </div>
 
@@ -105,7 +108,7 @@ const PageContent = async () => {
       <div className="grid lg:grid-cols-3 gap-8">
         {/* Left Column - Previous Entries (2/3 width) */}
         <div className="lg:col-span-2 space-y-6">
-          <h2 className="text-2xl font-semibold">Previous Entries</h2>
+          <h2 className="text-xl font-semibold">Previous Entries</h2>
           {remainingEntries.length > 0 ? (
             <div className="space-y-4">
               {remainingEntries.map((entry) => (
@@ -119,7 +122,7 @@ const PageContent = async () => {
 
         {/* Right Column - User Stats (1/3 width) */}
         <div className="space-y-6">
-          <h2 className="text-2xl font-semibold">Statistics</h2>
+          <h2 className="text-xl font-semibold">Statistics</h2>
           <UserStats
             entries={entries}
             uploads={uploads}
@@ -159,10 +162,10 @@ const FeaturedEntryCard = ({
             <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide mb-2">
               Most Recent
             </p>
-            <h2 className="text-4xl font-bold mb-4">{entry.name}</h2>
+            <h2 className="text-3xl font-bold mb-2">{entry.name}</h2>
             {entry.locationBorn && (
               <p className="text-lg text-muted-foreground mb-6">
-                {entry.locationBorn}
+                from {entry.locationBorn}
               </p>
             )}
           </div>
@@ -356,7 +359,7 @@ export const ActionButtons = ({ entry }: { entry: Entry }) => {
         <Icon icon="mdi:pencil-outline" className="size-4" /> Edit
       </Link>
       <Link
-        href={`/${entry.id}/obituaries/new`}
+        href={`/${entry.id}/obituaries/create`}
         className={buttonVariants({
           variant: "outline",
           size: "sm",
@@ -366,7 +369,7 @@ export const ActionButtons = ({ entry }: { entry: Entry }) => {
         <Icon icon="mdi:plus" className="size-4" /> New Obituary
       </Link>
       <Link
-        href={`/${entry.id}/images/new`}
+        href={`/${entry.id}/images/create`}
         className={buttonVariants({
           variant: "outline",
           size: "sm",
