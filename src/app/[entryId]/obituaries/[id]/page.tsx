@@ -48,7 +48,7 @@ export default async function ObituaryPage({ params }: PageProps) {
           "--sidebar-width-mobile": "20rem",
         } as Object
       }
-      defaultOpen={sidebarOpen}
+      defaultOpen={sidebarOpen || true}
       className="min-h-full grow"
     >
       <Suspense fallback="Loading...">
