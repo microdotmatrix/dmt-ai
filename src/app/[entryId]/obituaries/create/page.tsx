@@ -21,10 +21,14 @@ export default async function ObituaryCreatePage({ params }: PageProps) {
           className={buttonVariants({ variant: "outline", size: "sm" })}
         >
 <<<<<<< HEAD
+<<<<<<< HEAD
           <Icon icon="mdi:arrow-left" className="size-4 mr-2" />
 =======
           <Icon icon="mdi:arrow-left" className="w-4 h-4 mr-2" />
 >>>>>>> f697123 (feat: add obituary chat sidebar and document management features)
+=======
+          <Icon icon="mdi:arrow-left" className="size-4 mr-2" />
+>>>>>>> 82b2bd8 (feat: add 5 obituary limit and improve UI layout responsiveness)
           Back to Entry
         </Link>
       </div>

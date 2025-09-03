@@ -7,16 +7,22 @@ import {
 } from "@/components/ui/sidebar";
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 82b2bd8 (feat: add 5 obituary limit and improve UI layout responsiveness)
 import {
   getChatByDocumentId,
   getMessagesByChatId,
 } from "@/lib/db/queries/chats";
+<<<<<<< HEAD
 =======
 import { getChatByEntryId, getMessagesByChatId } from "@/lib/db/queries/chats";
 >>>>>>> f697123 (feat: add obituary chat sidebar and document management features)
 =======
 import { getChatByDocumentId, getMessagesByChatId } from "@/lib/db/queries/chats";
 >>>>>>> 859b3cb (feat: add document reference to chat schema and update related queries)
+=======
+>>>>>>> 82b2bd8 (feat: add 5 obituary limit and improve UI layout responsiveness)
 import { getDocumentById } from "@/lib/db/queries/documents";
 import { getEntryById } from "@/lib/db/queries/entries";
 import { auth } from "@clerk/nextjs/server";
