@@ -21,6 +21,13 @@ export const saveDocument = async ({
   userId: string;
 }) => {
   try {
+    // Validate UUID format before saving
+    const uuidRegex =
+      /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+    if (!uuidRegex.test(id)) {
+      throw new Error(`Invalid document ID format: ${id}. Expected UUID.`);
+    }
+
     await db
       .insert(DocumentTable)
       .values({
@@ -38,6 +45,47 @@ export const saveDocument = async ({
   } catch (error) {
     console.error(error);
     return { error: "Failed to save document" };
+  }
+};
+
+export const updateDocumentContent = async ({
+  id,
+  title,
+  content,
+  tokenUsage,
+  entryId,
+}: {
+  id: string;
+  title: string;
+  content: string;
+  tokenUsage: number | undefined;
+  entryId: string;
+}) => {
+  try {
+    await db
+      .update(DocumentTable)
+      .set({
+        title,
+        content,
+        tokenUsage,
+      })
+      .where(and(eq(DocumentTable.id, id), eq(DocumentTable.entryId, entryId)))
+      .returning();
+
+    return { success: true };
+  } catch (error) {
+    console.error(error);
+    return { error: "Failed to update document" };
+  }
+};
+
+export const deleteDocumentById = async (id: string) => {
+  try {
+    await db.delete(DocumentTable).where(eq(DocumentTable.id, id));
+    return { success: true };
+  } catch (error) {
+    console.error(error);
+    return { error: "Failed to delete document" };
   }
 };
 

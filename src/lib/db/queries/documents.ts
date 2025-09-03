@@ -2,7 +2,7 @@ import "server-only";
 
 import { db } from "@/lib/db";
 import { DocumentTable } from "@/lib/db/schema";
-import { asc, desc, eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 
 export const getDocumentsByEntryId = async (entryId: string) => {
   try {
@@ -24,8 +24,7 @@ export const getDocumentById = async (id: string) => {
     const [selectedDocument] = await db
       .select()
       .from(DocumentTable)
-      .where(eq(DocumentTable.id, id))
-      .orderBy(asc(DocumentTable.createdAt));
+      .where(eq(DocumentTable.id, id));
 
     return selectedDocument;
   } catch (error) {

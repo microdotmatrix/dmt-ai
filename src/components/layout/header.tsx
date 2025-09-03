@@ -34,7 +34,7 @@ export const Header = () => {
   const mounted = useMounted();
   return (
     <header className="sticky top-0 mt-4 z-50 bg-background border-b px-4 md:px-6 w-full">
-      <div className="flex h-16 items-center justify-between gap-4 w-full">
+      <div className="flex h-[var(--header-height)] items-center justify-between gap-4 w-full">
         {/* Left side */}
         <div className="flex flex-1 items-center gap-2">
           {/* Mobile menu trigger */}
@@ -73,12 +73,14 @@ export const Header = () => {
               </Button>
             </PopoverTrigger>
             <PopoverContent align="start" className="w-fit p-1 md:hidden">
-              <SignedIn>
-                <div className="my-2">
-                  <OrganizationSwitcher />
-                </div>
-                <Separator className="my-2" />
-              </SignedIn>
+              {mounted && (
+                <SignedIn>
+                  <div className="my-2">
+                    <OrganizationSwitcher />
+                  </div>
+                  <Separator className="my-2" />
+                </SignedIn>
+              )}
               <NavigationMenu className="max-w-none *:w-full">
                 <NavigationMenuList className="flex-col items-start gap-1 md:gap-2">
                   {navigationLinks.map((link, index) => {
@@ -117,9 +119,11 @@ export const Header = () => {
           </Popover>
 
           <NavigationMenu className="max-md:hidden space-x-4 lg:space-x-8">
-            <SignedIn>
-              <OrganizationSwitcher />
-            </SignedIn>
+            {mounted && (
+              <SignedIn>
+                <OrganizationSwitcher />
+              </SignedIn>
+            )}
             <NavigationMenuList className="gap-2">
               {navigationLinks.map((link, index) => {
                 const Icon = link.icon;

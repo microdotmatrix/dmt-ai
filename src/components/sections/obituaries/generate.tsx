@@ -1,7 +1,7 @@
 "use client";
 
 import { Response } from "@/components/ai/response";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -15,6 +15,7 @@ import { models } from "@/lib/ai/models";
 import type { Entry, EntryDetails } from "@/lib/db/schema";
 import { readStreamableValue } from "@ai-sdk/rsc";
 import { LanguageModel } from "ai";
+import Link from "next/link";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { EntryDetailsCard } from "../entries/details-card";
@@ -37,6 +38,7 @@ export const GenerateObituary = ({
   const [isReligious, setIsReligious] = useState<boolean>(false);
   const [completed, setCompleted] = useState<boolean>(false);
   const [startGenerating, setStartGenerating] = useState<boolean>(false);
+  const [obituaryId, setObituaryId] = useState<string | undefined>(undefined);
 
   const [languageModel, setLanguageModel] = useState<LanguageModel>(
     models.openai
@@ -71,7 +73,7 @@ export const GenerateObituary = ({
     });
 
     startTransition(async () => {
-      const { success, result, error } = await generateObituary(entry.id, {
+      const { success, result, error, id } = await generateObituary(entry.id, {
         data: formDataObj,
       });
 
@@ -86,6 +88,7 @@ export const GenerateObituary = ({
             for await (const text of readStreamableValue(result)) {
               setContent(text);
             }
+            setObituaryId(id);
           } catch (error) {
             console.error("Failed to read streamable value", error);
             toast.error("Failed to generate obituary");
@@ -98,7 +101,7 @@ export const GenerateObituary = ({
     });
   };
   return (
-    <div className="grid lg:grid-cols-6 gap-4 px-4 lg:px-8 py-8">
+    <div className="grid lg:grid-cols-6 gap-4 px-4 lg:px-8">
       <aside className="col-span-2">
         <EntryCard entry={entry} />
         <EntryDetailsCard entry={entry} entryDetails={entryDetails!} />
@@ -159,13 +162,42 @@ export const GenerateObituary = ({
             </Select>
           </div>
         </div>
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-6xl mx-auto">
           {!completed && !isPending && (
             <p>Generated Obituary will appear here</p>
           )}
           {!completed && isPending && <p>Generating Obituary...</p>}
 
           <Response key={content}>{content}</Response>
+          {completed && (
+            <div className="flex flex-col gap-4 mt-12 border-t pt-8">
+              <p>
+                What do you think of this obituary? To make revisions, click
+                "Edit"; or you can change your preferences on the left and click
+                "Regenerate".
+              </p>
+              <div className="flex items-center justify-center gap-4">
+                <Link
+                  href={`/${entry.id}/obituaries/${obituaryId}`}
+                  className={buttonVariants({ variant: "outline" })}
+                >
+                  Edit
+                </Link>
+                <Button
+                  type="button"
+                  variant="destructive"
+                  onClick={async () => {
+                    setCompleted(false);
+                    setContent(undefined);
+                    setObituaryId(undefined);
+                    await formAction();
+                  }}
+                >
+                  Regenerate
+                </Button>
+              </div>
+            </div>
+          )}
         </div>
       </aside>
     </div>

@@ -36,7 +36,12 @@ export default function RootLayout({
 }>) {
   return (
     <AuthProvider>
-      <html lang="en" data-scroll-behavior="smooth" suppressHydrationWarning>
+      <html
+        lang="en"
+        data-scroll-behavior="smooth"
+        suppressHydrationWarning
+        className="[--header-height:4rem]"
+      >
         <body
           className={cn(
             display.variable,

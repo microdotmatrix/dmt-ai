@@ -1,6 +1,7 @@
 import { relations } from "drizzle-orm";
 import {
   boolean,
+  check,
   foreignKey,
   integer,
   json,
@@ -10,6 +11,7 @@ import {
   uuid,
   varchar,
 } from "drizzle-orm/pg-core";
+import { sql } from "drizzle-orm";
 import { pgTable } from "../utils";
 import { EntryTable } from "./entries";
 import { UserTable } from "./users";
@@ -110,7 +112,10 @@ export const DocumentTable = pgTable(
       .notNull(),
   },
   (table) => {
-    return [primaryKey({ columns: [table.id, table.createdAt] })];
+    return [
+      primaryKey({ columns: [table.id, table.createdAt] }),
+      check("valid_uuid_format", sql`${table.id} ~ '^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$'`)
+    ];
   }
 );
 

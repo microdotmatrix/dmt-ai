@@ -1,5 +1,8 @@
 import { GenerateObituary } from "@/components/sections/obituaries/generate";
+import { buttonVariants } from "@/components/ui/button";
+import { Icon } from "@/components/ui/icon";
 import { getEntryById, getEntryDetailsById } from "@/lib/db/queries/entries";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
@@ -12,6 +15,15 @@ export default async function ObituaryCreatePage({ params }: PageProps) {
 
   return (
     <main>
+      <div className="flex items-center gap-4 px-4 lg:px-8 mt-8 mb-4">
+        <Link
+          href={`/${entryId}`}
+          className={buttonVariants({ variant: "outline", size: "sm" })}
+        >
+          <Icon icon="mdi:arrow-left" className="w-4 h-4 mr-2" />
+          Back to Entry
+        </Link>
+      </div>
       <Suspense fallback="Loading...">
         <ObituaryCreateContent entryId={entryId} />
       </Suspense>
@@ -29,9 +41,5 @@ const ObituaryCreateContent = async ({ entryId }: { entryId: string }) => {
     notFound();
   }
 
-  return (
-    <main>
-      <GenerateObituary entry={entry} entryDetails={entryDetails!} />
-    </main>
-  );
+  return <GenerateObituary entry={entry} entryDetails={entryDetails!} />;
 };

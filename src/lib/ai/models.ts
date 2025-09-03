@@ -7,7 +7,7 @@ const openrouter = createOpenRouter({
 });
 
 export const models = {
-  openai: openai("gpt-4o"),
+  openai: openai("gpt-4o-mini"),
   anthropic: anthropic("claude-3-5-sonnet-20240620"),
   openrouter: openrouter("@preset/obituary-generator"),
 };

@@ -28,7 +28,7 @@ export const saveChat = async ({
   visibility,
 }: {
   id: string;
-  userId: string;
+  userId: string | null;
   entryId: string;
   title: string;
   visibility: "private" | "public";
@@ -37,7 +37,7 @@ export const saveChat = async ({
     return await db.insert(ChatTable).values({
       id,
       createdAt: new Date(),
-      userId,
+      userId: userId!,
       entryId,
       title,
       visibility,
@@ -142,7 +142,23 @@ export const getChatById = async ({ id }: { id: string }) => {
       .where(eq(ChatTable.id, id));
     return selectedChat;
   } catch (error) {
-    throw new Error("Failed to get chat by id");
+    console.error("Error in getChatById:", error);
+    throw new Error(`Failed to get chat by id: ${error instanceof Error ? error.message : String(error)}`);
+  }
+};
+
+export const getChatByEntryId = async ({ entryId, userId }: { entryId: string; userId: string }) => {
+  try {
+    const [selectedChat] = await db
+      .select()
+      .from(ChatTable)
+      .where(and(eq(ChatTable.entryId, entryId), eq(ChatTable.userId, userId)))
+      .orderBy(desc(ChatTable.createdAt))
+      .limit(1);
+    return selectedChat;
+  } catch (error) {
+    console.error("Error in getChatByEntryId:", error);
+    throw new Error(`Failed to get chat by entry id: ${error instanceof Error ? error.message : String(error)}`);
   }
 };
 
@@ -154,7 +170,9 @@ export const saveMessages = async ({
   try {
     return await db.insert(MessageTable).values(messages);
   } catch (error) {
-    throw new Error("Failed to save messages");
+    console.error("Error in saveMessages:", error);
+    console.error("Message data:", JSON.stringify(messages, null, 2));
+    throw new Error(`Failed to save messages: ${error instanceof Error ? error.message : String(error)}`);
   }
 };
 
@@ -284,7 +302,7 @@ export const getMessageCountByUserId = async ({
   id,
   differenceInHours,
 }: {
-  id: string;
+  id: string | null;
   differenceInHours: number;
 }) => {
   try {
@@ -298,7 +316,7 @@ export const getMessageCountByUserId = async ({
       .innerJoin(ChatTable, eq(MessageTable.chatId, ChatTable.id))
       .where(
         and(
-          eq(ChatTable.userId, id),
+          eq(ChatTable.userId, id!),
           gte(MessageTable.createdAt, twentyFourHoursAgo),
           eq(MessageTable.role, "user")
         )

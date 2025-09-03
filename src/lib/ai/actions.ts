@@ -45,6 +45,7 @@ export const generateObituary = async (
 
     let tokenUsage: number | undefined = 0;
     let generatedContent = "";
+    let id = crypto.randomUUID();
 
     const { textStream } = streamText({
       model: models.openai,
@@ -57,7 +58,7 @@ export const generateObituary = async (
 
         tokenUsage = totalTokens;
         await saveDocument({
-          id: crypto.randomUUID(),
+          id,
           title: `Obituary for ${name}`,
           content: text,
           tokenUsage,
@@ -68,40 +69,10 @@ export const generateObituary = async (
       },
     });
 
-    // (async () => {
-    //   const { textStream } = streamText({
-    //     model: models.openai,
-    //     system: systemPrompt,
-    //     messages: [{ role: "user", content: prompt }],
-    //     maxOutputTokens: 1000,
-    //     experimental_transform: smoothStream({ chunking: "word" }),
-    //     onFinish: async ({ usage, text }) => {
-    //       const { totalTokens } = usage;
-
-    //       tokenUsage = totalTokens;
-    //       await saveDocument({
-    //         id: crypto.randomUUID(),
-    //         title: `Obituary for ${name}`,
-    //         content: text,
-    //         tokenUsage,
-    //         kind: "obituary",
-    //         entryId,
-    //         userId,
-    //       });
-    //     },
-    //   });
-
-    //   for await (const delta of textStream) {
-    //     generatedContent += delta;
-    //     stream.update(delta);
-    //   }
-
-    //   stream.done();
-    // })();
-
     return {
       success: true,
       result: createStreamableValue(textStream).value,
+      id,
     };
   } catch (error) {
     console.error(error);
@@ -110,3 +81,14 @@ export const generateObituary = async (
     };
   }
 };
+
+export interface ServerMessage {
+  role: "user" | "assistant";
+  content: string;
+}
+
+export interface ClientMessage {
+  id: string;
+  role: "user" | "assistant";
+  display: React.ReactNode;
+}

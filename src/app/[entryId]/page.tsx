@@ -1,10 +1,12 @@
 // import { SavedQuotes } from "@/components/quotes/saved";
+import { ActionButton } from "@/components/elements/action-button";
 import { EntryDetailsCard } from "@/components/sections/entries/details-card";
 import { EntryForm } from "@/components/sections/entries/entry-form";
 import { EntryImageUpload } from "@/components/sections/entries/entry-image-upload";
 import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Icon } from "@/components/ui/icon";
+import { deleteDocumentById } from "@/lib/db/actions/documents";
 import { getEntryImages } from "@/lib/db/actions/images";
 import { getDocumentsByEntryId } from "@/lib/db/queries/documents";
 import { getEntryById, getEntryDetailsById } from "@/lib/db/queries/entries";
@@ -152,13 +154,33 @@ const EntryEditContent = async ({
                             <Link
                               href={`/${entry.id}/obituaries/${obituary.id}`}
                               className={buttonVariants({
-                                variant: "ghost",
+                                variant: "outline",
                                 size: "sm",
-                                className: "h-8 w-8 p-0 flex-shrink-0",
+                                className: "size-8 p-0 flex-shrink-0",
                               })}
                             >
                               <Icon icon="mdi:eye" className="w-4 h-4" />
                             </Link>
+                            <ActionButton
+                              action={async () => {
+                                "use server";
+                                const result = await deleteDocumentById(
+                                  obituary.id
+                                );
+                                if (result.success) {
+                                  return { error: false };
+                                } else {
+                                  return { error: true, message: result.error };
+                                }
+                              }}
+                              requireAreYouSure={true}
+                              areYouSureDescription={`Are you sure you want to delete ${obituary.title}?`}
+                              variant="destructive"
+                              size="sm"
+                              className="size-8 p-0 flex-shrink-0"
+                            >
+                              <Icon icon="mdi:delete" className="w-4 h-4" />
+                            </ActionButton>
                           </div>
                         </div>
                       ))}
