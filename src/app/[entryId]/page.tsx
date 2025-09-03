@@ -3,7 +3,7 @@ import { ActionButton } from "@/components/elements/action-button";
 import { EntryDetailsCard } from "@/components/sections/entries/details-card";
 import { EntryForm } from "@/components/sections/entries/entry-form";
 import { EntryImageUpload } from "@/components/sections/entries/entry-image-upload";
-import { buttonVariants } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Icon } from "@/components/ui/icon";
 import { deleteDocumentById } from "@/lib/db/actions/documents";
@@ -186,17 +186,32 @@ const EntryEditContent = async ({
                       ))}
                     </div>
                     <div className="border-t pt-3">
-                      <Link
-                        href={`/${entry.id}/obituaries/create`}
-                        className={buttonVariants({
-                          variant: "outline",
-                          size: "sm",
-                          className: "w-full",
-                        })}
-                      >
-                        <Icon icon="mdi:plus" className="w-4 h-4 mr-2" />
-                        Generate New Obituary
-                      </Link>
+                      {obituaries.length >= 5 ? (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="w-full"
+                          disabled
+                        >
+                          <Icon
+                            icon="mdi:do-not-disturb"
+                            className="w-4 h-4 mr-2"
+                          />
+                          Obituary Limit Reached
+                        </Button>
+                      ) : (
+                        <Link
+                          href={`/${entry.id}/obituaries/create`}
+                          className={buttonVariants({
+                            variant: "outline",
+                            size: "sm",
+                            className: "w-full",
+                          })}
+                        >
+                          <Icon icon="mdi:plus" className="w-4 h-4 mr-2" />
+                          Generate New Obituary
+                        </Link>
+                      )}
                     </div>
                   </>
                 ) : (

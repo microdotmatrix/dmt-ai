@@ -19,17 +19,17 @@ export const EntryCard = ({ entry }: EntryCardProps) => {
 
   return (
     <Card className="w-full">
-      <CardHeader className="pb-3">
+      <CardHeader className="pb-3 sr-only">
         <CardTitle className="flex items-center gap-2 text-lg">
           <Icon icon="mdi:account" className="size-7" />
           {entry.name}
         </CardTitle>
       </CardHeader>
-      <CardContent className="grid grid-cols-2 gap-2">
+      <CardContent className="grid md:grid-cols-6 gap-2">
         {/* Profile Image */}
         {entry.image && (
-          <div className="flex justify-center">
-            <div className="relative size-48 rounded-full overflow-hidden border-2 border-muted">
+          <div className="lg:col-span-2 flex justify-center">
+            <div className="relative min-h-64 size-full rounded-lg overflow-hidden">
               <Image
                 src={entry.image}
                 alt={`${entry.name} portrait`}
@@ -41,7 +41,11 @@ export const EntryCard = ({ entry }: EntryCardProps) => {
         )}
 
         {/* Key Information */}
-        <div className="space-y-3">
+        <div className="lg:col-span-4 space-y-1 lg:p-4">
+          <header className="flex items-center gap-2 text-lg font-semibold">
+            <Icon icon="mdi:account" className="size-7" />
+            {entry.name}
+          </header>
           {/* Birth Date */}
           {entry.dateOfBirth && (
             <div>

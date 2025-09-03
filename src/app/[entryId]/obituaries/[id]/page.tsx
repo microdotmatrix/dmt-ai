@@ -5,7 +5,10 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { getChatByDocumentId, getMessagesByChatId } from "@/lib/db/queries/chats";
+import {
+  getChatByDocumentId,
+  getMessagesByChatId,
+} from "@/lib/db/queries/chats";
 import { getDocumentById } from "@/lib/db/queries/documents";
 import { getEntryById } from "@/lib/db/queries/entries";
 import { auth } from "@clerk/nextjs/server";

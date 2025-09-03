@@ -20,7 +20,7 @@ export default async function ObituaryCreatePage({ params }: PageProps) {
           href={`/${entryId}`}
           className={buttonVariants({ variant: "outline", size: "sm" })}
         >
-          <Icon icon="mdi:arrow-left" className="w-4 h-4 mr-2" />
+          <Icon icon="mdi:arrow-left" className="size-4 mr-2" />
           Back to Entry
         </Link>
       </div>

@@ -102,11 +102,11 @@ export const GenerateObituary = ({
   };
   return (
     <div className="grid lg:grid-cols-6 gap-4 px-4 lg:px-8">
-      <aside className="col-span-2">
+      <aside className="lg:col-span-2 space-y-4">
         <EntryCard entry={entry} />
         <EntryDetailsCard entry={entry} entryDetails={entryDetails!} />
 
-        <form action={formAction}>
+        <form action={formAction} className="py-4 px-4 lg:px-2">
           <ObituaryOptions
             entry={entry}
             entryDetails={entryDetails!}
@@ -141,18 +141,13 @@ export const GenerateObituary = ({
           </section>
         </form>
       </aside>
-      <aside className="col-span-4">
-        <div className="flex items-center gap-4 max-w-sm ml-auto mr-0 mb-8">
+      <aside className="lg:col-span-4">
+        <div className="flex flex-col lg:flex-row items-center gap-4 max-w-sm ml-auto mr-0 mb-8">
           <Label htmlFor="languageModel">Language Model</Label>
           <div className="flex-1">
-            <Select
-              value={languageModel as string}
-              onValueChange={(value) =>
-                setLanguageModel(value as LanguageModel)
-              }
-            >
+            <Select>
               <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select a language model" />
+                <SelectValue placeholder="Select function coming soon..." />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="openai">OpenAI</SelectItem>

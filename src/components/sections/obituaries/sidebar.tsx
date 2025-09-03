@@ -137,7 +137,7 @@ export const ObituarySidebar = ({
                 }`}
               >
                 <div
-                  className={`max-w-[85%] rounded-lg px-3 py-2 ${
+                  className={`max-w-[85%] rounded-lg px-3 py-2 text-sm lg:text-base ${
                     message.role === "user"
                       ? "bg-primary text-primary-foreground"
                       : "bg-muted"
@@ -150,7 +150,7 @@ export const ObituarySidebar = ({
                     if (part.type === "data-updateDocument") {
                       return (
                         <div key={index}>
-                          <p>
+                          <p className="text-sm lg:text-base">
                             {
                               (part.data as { changeDescription: string })
                                 .changeDescription

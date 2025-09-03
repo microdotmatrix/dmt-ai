@@ -85,7 +85,7 @@ export const ObituaryOptions = ({
           </span>
         </RadioGroup>
       </div>
-      <Separator />
+      <Separator className="my-4" />
       <Label htmlFor="tone">Desired Tone</Label>
       <RadioGroup
         defaultValue={tone}
@@ -119,7 +119,7 @@ export const ObituaryOptions = ({
           ))}
         </section>
       </RadioGroup>
-      <Separator />
+      <Separator className="my-4" />
       <section className="space-y-3">
         <Label htmlFor="avoidNotes">Miscellaneous Notes</Label>
         <div className="grid md:grid-cols-2 gap-4">
@@ -145,7 +145,7 @@ export const ObituaryOptions = ({
           />
         </div>
       </section>
-      <section className="flex items-center gap-4">
+      <section className="flex items-center gap-4 my-4">
         <Checkbox
           id="isReligious"
           defaultChecked={isReligious || false}
