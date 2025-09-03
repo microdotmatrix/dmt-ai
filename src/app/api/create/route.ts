@@ -56,16 +56,8 @@ export async function POST(request: NextRequest) {
       id,
       userId,
       entryId: document.entryId,
-<<<<<<< HEAD
-<<<<<<< HEAD
       documentId: document.id,
       documentCreatedAt: document.createdAt,
-=======
->>>>>>> f697123 (feat: add obituary chat sidebar and document management features)
-=======
-      documentId: document.id,
-      documentCreatedAt: document.createdAt,
->>>>>>> 859b3cb (feat: add document reference to chat schema and update related queries)
       title,
       visibility,
     });

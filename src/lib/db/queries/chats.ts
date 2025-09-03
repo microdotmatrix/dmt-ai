@@ -149,11 +149,21 @@ export const getChatById = async ({ id }: { id: string }) => {
     return selectedChat;
   } catch (error) {
     console.error("Error in getChatById:", error);
-    throw new Error(`Failed to get chat by id: ${error instanceof Error ? error.message : String(error)}`);
+    throw new Error(
+      `Failed to get chat by id: ${
+        error instanceof Error ? error.message : String(error)
+      }`
+    );
   }
 };
 
-export const getChatByEntryId = async ({ entryId, userId }: { entryId: string; userId: string }) => {
+export const getChatByEntryId = async ({
+  entryId,
+  userId,
+}: {
+  entryId: string;
+  userId: string;
+}) => {
   try {
     const [selectedChat] = await db
       .select()
@@ -164,64 +174,44 @@ export const getChatByEntryId = async ({ entryId, userId }: { entryId: string; u
     return selectedChat;
   } catch (error) {
     console.error("Error in getChatByEntryId:", error);
-    throw new Error(`Failed to get chat by entry id: ${error instanceof Error ? error.message : String(error)}`);
-<<<<<<< HEAD
+    throw new Error(
+      `Failed to get chat by entry id: ${
+        error instanceof Error ? error.message : String(error)
+      }`
+    );
   }
 };
 
-export const getChatByDocumentId = async ({ 
-  documentId, 
-  documentCreatedAt, 
-  userId 
-}: { 
-  documentId: string; 
+export const getChatByDocumentId = async ({
+  documentId,
+  documentCreatedAt,
+  userId,
+}: {
+  documentId: string;
   documentCreatedAt: Date;
-  userId: string; 
+  userId: string;
 }) => {
   try {
     const [selectedChat] = await db
       .select()
       .from(ChatTable)
-      .where(and(
-        eq(ChatTable.documentId, documentId),
-        eq(ChatTable.documentCreatedAt, documentCreatedAt),
-        eq(ChatTable.userId, userId)
-      ))
+      .where(
+        and(
+          eq(ChatTable.documentId, documentId),
+          eq(ChatTable.documentCreatedAt, documentCreatedAt),
+          eq(ChatTable.userId, userId)
+        )
+      )
       .orderBy(desc(ChatTable.createdAt))
       .limit(1);
     return selectedChat;
   } catch (error) {
     console.error("Error in getChatByDocumentId:", error);
-    throw new Error(`Failed to get chat by document id: ${error instanceof Error ? error.message : String(error)}`);
-=======
->>>>>>> f697123 (feat: add obituary chat sidebar and document management features)
-  }
-};
-
-export const getChatByDocumentId = async ({ 
-  documentId, 
-  documentCreatedAt, 
-  userId 
-}: { 
-  documentId: string; 
-  documentCreatedAt: Date;
-  userId: string; 
-}) => {
-  try {
-    const [selectedChat] = await db
-      .select()
-      .from(ChatTable)
-      .where(and(
-        eq(ChatTable.documentId, documentId),
-        eq(ChatTable.documentCreatedAt, documentCreatedAt),
-        eq(ChatTable.userId, userId)
-      ))
-      .orderBy(desc(ChatTable.createdAt))
-      .limit(1);
-    return selectedChat;
-  } catch (error) {
-    console.error("Error in getChatByDocumentId:", error);
-    throw new Error(`Failed to get chat by document id: ${error instanceof Error ? error.message : String(error)}`);
+    throw new Error(
+      `Failed to get chat by document id: ${
+        error instanceof Error ? error.message : String(error)
+      }`
+    );
   }
 };
 
@@ -235,7 +225,11 @@ export const saveMessages = async ({
   } catch (error) {
     console.error("Error in saveMessages:", error);
     console.error("Message data:", JSON.stringify(messages, null, 2));
-    throw new Error(`Failed to save messages: ${error instanceof Error ? error.message : String(error)}`);
+    throw new Error(
+      `Failed to save messages: ${
+        error instanceof Error ? error.message : String(error)
+      }`
+    );
   }
 };
 

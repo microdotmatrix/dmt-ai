@@ -137,15 +137,7 @@ export const ObituarySidebar = ({
                 }`}
               >
                 <div
-<<<<<<< HEAD
-<<<<<<< HEAD
                   className={`max-w-[85%] rounded-lg px-3 py-2 text-sm lg:text-base ${
-=======
-                  className={`max-w-[85%] rounded-lg px-3 py-2 ${
->>>>>>> f697123 (feat: add obituary chat sidebar and document management features)
-=======
-                  className={`max-w-[85%] rounded-lg px-3 py-2 text-sm lg:text-base ${
->>>>>>> 82b2bd8 (feat: add 5 obituary limit and improve UI layout responsiveness)
                     message.role === "user"
                       ? "bg-primary text-primary-foreground"
                       : "bg-muted"
@@ -158,15 +150,7 @@ export const ObituarySidebar = ({
                     if (part.type === "data-updateDocument") {
                       return (
                         <div key={index}>
-<<<<<<< HEAD
-<<<<<<< HEAD
                           <p className="text-sm lg:text-base">
-=======
-                          <p>
->>>>>>> f697123 (feat: add obituary chat sidebar and document management features)
-=======
-                          <p className="text-sm lg:text-base">
->>>>>>> 82b2bd8 (feat: add 5 obituary limit and improve UI layout responsiveness)
                             {
                               (part.data as { changeDescription: string })
                                 .changeDescription
