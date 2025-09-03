@@ -64,6 +64,20 @@
       "when": 1756794143584,
       "tag": "0008_groovy_magus",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1756858060181,
+      "tag": "0009_public_spiral",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1756858479384,
+      "tag": "0010_peaceful_hairball",
+      "breakpoints": true
     }
   ]
 }

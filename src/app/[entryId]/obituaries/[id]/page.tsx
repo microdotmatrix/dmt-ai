@@ -5,7 +5,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { getChatByEntryId, getMessagesByChatId } from "@/lib/db/queries/chats";
+import { getChatByDocumentId, getMessagesByChatId } from "@/lib/db/queries/chats";
 import { getDocumentById } from "@/lib/db/queries/documents";
 import { getEntryById } from "@/lib/db/queries/entries";
 import { auth } from "@clerk/nextjs/server";
@@ -26,8 +26,9 @@ export default async function ObituaryPage({ params }: PageProps) {
   const { userId } = await auth();
   const document = await getDocumentById(id);
 
-  const existingChat = await getChatByEntryId({
-    entryId: document.entryId,
+  const existingChat = await getChatByDocumentId({
+    documentId: document.id,
+    documentCreatedAt: document.createdAt,
     userId: userId!,
   });
 

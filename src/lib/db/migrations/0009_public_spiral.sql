@@ -1,0 +1,1 @@
+ALTER TABLE "dmai2_chat" ADD COLUMN "document_id" uuid;

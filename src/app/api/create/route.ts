@@ -56,6 +56,8 @@ export async function POST(request: NextRequest) {
       id,
       userId,
       entryId: document.entryId,
+      documentId: document.id,
+      documentCreatedAt: document.createdAt,
       title,
       visibility,
     });

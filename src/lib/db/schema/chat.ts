@@ -16,22 +16,33 @@ import { pgTable } from "../utils";
 import { EntryTable } from "./entries";
 import { UserTable } from "./users";
 
-export const ChatTable = pgTable("chat", {
-  id: uuid("id").primaryKey().notNull().defaultRandom(),
-  title: text("title").notNull(),
-  userId: text("user_id")
-    .notNull()
-    .references(() => UserTable.id, { onDelete: "cascade" }),
-  entryId: text("entry_id")
-    .notNull()
-    .references(() => EntryTable.id, { onDelete: "cascade" }),
-  createdAt: timestamp("created_at")
-    .$defaultFn(() => new Date())
-    .notNull(),
-  visibility: varchar("visibility", { enum: ["public", "private"] })
-    .notNull()
-    .default("private"),
-});
+export const ChatTable = pgTable(
+  "chat",
+  {
+    id: uuid("id").primaryKey().notNull().defaultRandom(),
+    title: text("title").notNull(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => UserTable.id, { onDelete: "cascade" }),
+    entryId: text("entry_id")
+      .notNull()
+      .references(() => EntryTable.id, { onDelete: "cascade" }),
+    documentId: uuid("document_id"),
+    documentCreatedAt: timestamp("document_created_at"),
+    createdAt: timestamp("created_at")
+      .$defaultFn(() => new Date())
+      .notNull(),
+    visibility: varchar("visibility", { enum: ["public", "private"] })
+      .notNull()
+      .default("private"),
+  },
+  (table) => [
+    foreignKey({
+      columns: [table.documentId, table.documentCreatedAt],
+      foreignColumns: [DocumentTable.id, DocumentTable.createdAt],
+    }),
+  ]
+);
 
 export const ChatRelations = relations(ChatTable, ({ one }) => ({
   user: one(UserTable, {
@@ -41,6 +52,10 @@ export const ChatRelations = relations(ChatTable, ({ one }) => ({
   entry: one(EntryTable, {
     fields: [ChatTable.entryId],
     references: [EntryTable.id],
+  }),
+  document: one(DocumentTable, {
+    fields: [ChatTable.documentId, ChatTable.documentCreatedAt],
+    references: [DocumentTable.id, DocumentTable.createdAt],
   }),
 }));
 

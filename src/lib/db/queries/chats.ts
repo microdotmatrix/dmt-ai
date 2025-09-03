@@ -24,12 +24,16 @@ export const saveChat = async ({
   id,
   userId,
   entryId,
+  documentId,
+  documentCreatedAt,
   title,
   visibility,
 }: {
   id: string;
   userId: string | null;
   entryId: string;
+  documentId?: string;
+  documentCreatedAt?: Date;
   title: string;
   visibility: "private" | "public";
 }) => {
@@ -39,6 +43,8 @@ export const saveChat = async ({
       createdAt: new Date(),
       userId: userId!,
       entryId,
+      documentId,
+      documentCreatedAt,
       title,
       visibility,
     });
@@ -159,6 +165,33 @@ export const getChatByEntryId = async ({ entryId, userId }: { entryId: string; u
   } catch (error) {
     console.error("Error in getChatByEntryId:", error);
     throw new Error(`Failed to get chat by entry id: ${error instanceof Error ? error.message : String(error)}`);
+  }
+};
+
+export const getChatByDocumentId = async ({ 
+  documentId, 
+  documentCreatedAt, 
+  userId 
+}: { 
+  documentId: string; 
+  documentCreatedAt: Date;
+  userId: string; 
+}) => {
+  try {
+    const [selectedChat] = await db
+      .select()
+      .from(ChatTable)
+      .where(and(
+        eq(ChatTable.documentId, documentId),
+        eq(ChatTable.documentCreatedAt, documentCreatedAt),
+        eq(ChatTable.userId, userId)
+      ))
+      .orderBy(desc(ChatTable.createdAt))
+      .limit(1);
+    return selectedChat;
+  } catch (error) {
+    console.error("Error in getChatByDocumentId:", error);
+    throw new Error(`Failed to get chat by document id: ${error instanceof Error ? error.message : String(error)}`);
   }
 };
 
