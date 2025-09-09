@@ -1,5 +1,7 @@
 import { ObituarySidebar } from "@/components/sections/obituaries/sidebar";
 import { ObituaryViewer } from "@/components/sections/obituaries/viewer";
+import { ObituarySidebarSkeleton } from "@/components/skeletons/obituary-sidebar-skeleton";
+import { ObituaryViewerSkeleton } from "@/components/skeletons/obituary-viewer-skeleton";
 import {
   SidebarInset,
   SidebarProvider,
@@ -51,16 +53,17 @@ export default async function ObituaryPage({ params }: PageProps) {
       defaultOpen={sidebarOpen || true}
       className="min-h-full grow"
     >
-      <Suspense fallback="Loading...">
+      <Suspense fallback={<ObituarySidebarSkeleton />}>
         <ObituarySidebar
           documentId={id}
           initialChat={existingChat}
           initialMessages={messages}
+          isVisible={sidebarOpen}
         />
       </Suspense>
       <SidebarInset className="bg-transparent min-h-full grow">
         <SidebarTrigger />
-        <Suspense fallback="Loading...">
+        <Suspense fallback={<ObituaryViewerSkeleton />}>
           <ObituaryPageContent entryId={entryId} id={id} />
         </Suspense>
       </SidebarInset>

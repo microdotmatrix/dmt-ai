@@ -46,7 +46,13 @@ export const EntryDetailsDialog = ({
             : "Add Details"}
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-4xl max-h-[90vh] h-full overflow-y-auto p-0">
+      <DialogContent
+        className="sm:max-w-4xl max-h-[90vh] h-full overflow-y-auto p-0"
+        style={{
+          scrollbarWidth: "thin",
+          scrollbarColor: "var(--color-accent) transparent",
+        }}
+      >
         <DialogHeader className="pt-8">
           <DialogTitle className="sr-only">Biography: {entry.name}</DialogTitle>
           <DialogDescription className="sr-only">

@@ -3,6 +3,7 @@ import { ActionButton } from "@/components/elements/action-button";
 import { EntryDetailsCard } from "@/components/sections/entries/details-card";
 import { EntryForm } from "@/components/sections/entries/entry-form";
 import { EntryImageUpload } from "@/components/sections/entries/entry-image-upload";
+import { EntryEditContentSkeleton } from "@/components/skeletons/entry-edit-content-skeleton";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Icon } from "@/components/ui/icon";
@@ -34,9 +35,9 @@ export default async function EntryEditPage({ params }: PageProps) {
   const generatedImages: any[] = [];
 
   return (
-    <main className="min-h-screen">
+    <main>
       <div className="container mx-auto px-4 py-6">
-        <Suspense fallback="Loading...">
+        <Suspense fallback={<EntryEditContentSkeleton />}>
           <EntryEditContent
             entry={entry}
             obituaries={obituaries}
@@ -64,7 +65,7 @@ const EntryEditContent = async ({
     : [];
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 loading-fade">
       {/* Header */}
       <div className="flex items-center gap-4">
         <Link
@@ -130,7 +131,7 @@ const EntryEditContent = async ({
               <div className="space-y-3">
                 {obituaries.length > 0 ? (
                   <>
-                    <div className="space-y-2 max-h-60 overflow-y-auto">
+                    <div className="space-y-2 max-h-60 overflow-y-auto scroll-style">
                       {obituaries.map((obituary) => (
                         <div
                           key={obituary.id}

@@ -1,5 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Icon } from "@/components/ui/icon";
+import { Card, CardContent } from "@/components/ui/card";
 import { Entry } from "@/lib/db/schema";
 import Image from "next/image";
 
@@ -18,17 +17,11 @@ export const EntryCard = ({ entry }: EntryCardProps) => {
   };
 
   return (
-    <Card className="w-full">
-      <CardHeader className="pb-3 sr-only">
-        <CardTitle className="flex items-center gap-2 text-lg">
-          <Icon icon="mdi:account" className="size-7" />
-          {entry.name}
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="grid md:grid-cols-6 gap-2">
+    <Card className="w-full p-0">
+      <CardContent className="grid sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-8 gap-2 p-4">
         {/* Profile Image */}
         {entry.image && (
-          <div className="lg:col-span-2 flex justify-center">
+          <div className="lg:col-span-3 flex justify-center">
             <div className="relative min-h-64 size-full rounded-lg overflow-hidden">
               <Image
                 src={entry.image}
@@ -41,11 +34,10 @@ export const EntryCard = ({ entry }: EntryCardProps) => {
         )}
 
         {/* Key Information */}
-        <div className="lg:col-span-4 space-y-1 lg:p-4">
-          <header className="flex items-center gap-2 text-lg font-semibold">
-            <Icon icon="mdi:account" className="size-7" />
+        <div className="lg:col-span-5 space-y-1 lg:p-4 place-content-center">
+          <h4 className="flex items-center gap-2 text-lg font-semibold">
             {entry.name}
-          </header>
+          </h4>
           {/* Birth Date */}
           {entry.dateOfBirth && (
             <div>

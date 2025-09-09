@@ -1,2 +1,0 @@
-ALTER TABLE "dmai2_chat" ADD COLUMN "document_created_at" timestamp;--> statement-breakpoint
-ALTER TABLE "dmai2_chat" ADD CONSTRAINT "dmai2_chat_document_id_document_created_at_dmai2_document_id_created_at_fk" FOREIGN KEY ("document_id","document_created_at") REFERENCES "public"."dmai2_document"("id","created_at") ON DELETE no action ON UPDATE no action;

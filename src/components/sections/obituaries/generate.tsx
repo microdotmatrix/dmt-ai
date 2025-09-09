@@ -1,7 +1,9 @@
 "use client";
 
 import { Response } from "@/components/ai/response";
+import { Typewriter } from "@/components/elements/typewriter";
 import { Button, buttonVariants } from "@/components/ui/button";
+import { Icon } from "@/components/ui/icon";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -57,7 +59,10 @@ export const GenerateObituary = ({
     }
   };
 
-  const formAction = async () => {
+  const formAction = async (
+    e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>
+  ) => {
+    e.preventDefault();
     setContent(undefined);
 
     const formDataObj = new FormData();
@@ -100,13 +105,21 @@ export const GenerateObituary = ({
       }
     });
   };
-  return (
-    <div className="grid lg:grid-cols-6 gap-4 px-4 lg:px-8">
-      <aside className="lg:col-span-2 space-y-4">
-        <EntryCard entry={entry} />
-        <EntryDetailsCard entry={entry} entryDetails={entryDetails!} />
 
-        <form action={formAction} className="py-4 px-4 lg:px-2">
+  // TODO: Add more advanced logic to validate entry details and determine if they are complete
+  const needsMoreInfo = !entryDetails;
+
+  return (
+    <div className="grid md:grid-cols-6 gap-4 px-4 xl:px-8 loading-fade">
+      <aside className="md:col-span-3 2xl:col-span-2 space-y-4">
+        <EntryCard entry={entry} />
+        <EntryDetailsCard
+          entry={entry}
+          entryDetails={entryDetails!}
+          collapsible
+        />
+
+        <form className="py-4 px-4 lg:px-2" onSubmit={formAction}>
           <ObituaryOptions
             entry={entry}
             entryDetails={entryDetails!}
@@ -119,14 +132,12 @@ export const GenerateObituary = ({
             isPending={isPending}
             handleInputChange={handleInputChange}
           />
-          <section className="flex items-center gap-4">
-            <Button type="submit" disabled={isPending} className="flex-1">
-              {isPending ? "Generating..." : "Generate Obituary"}
-            </Button>
+          <section className="flex items-center gap-4 mt-12">
             <Button
               type="reset"
-              variant="outline"
-              disabled={isPending}
+              variant="ghost"
+              size="lg"
+              disabled={isPending || needsMoreInfo}
               onClick={() => {
                 setStyle("modern");
                 setTone("reverent");
@@ -134,15 +145,34 @@ export const GenerateObituary = ({
                 setToAvoid("");
                 setIsReligious(false);
               }}
-              className="flex-1"
+              className="flex-auto bg-muted/50 border border-muted/50"
             >
               Reset
+            </Button>
+            <Button
+              type="submit"
+              size="lg"
+              disabled={isPending || needsMoreInfo}
+              className="flex-auto flex items-center gap-2"
+            >
+              {needsMoreInfo && (
+                <Icon icon="mdi:alert-outline" className="size-4" />
+              )}
+              {needsMoreInfo && "Details Needed"}
+              {!needsMoreInfo && isPending
+                ? "Generating..."
+                : "Generate Obituary"}
+              {!needsMoreInfo && isPending ? (
+                <Icon icon="mdi:loading" className="size-4 animate-spin" />
+              ) : (
+                <Icon icon="mdi:arrow-right" className="size-4" />
+              )}
             </Button>
           </section>
         </form>
       </aside>
-      <aside className="lg:col-span-4">
-        <div className="flex flex-col lg:flex-row items-center gap-4 max-w-sm ml-auto mr-0 mb-8">
+      <aside className="md:col-span-3 2xl:col-span-4">
+        <div className="flex flex-row items-center gap-4 px-4 md:px-0 lg:max-w-sm mx-auto md:mr-0 mb-8">
           <Label htmlFor="languageModel">Language Model</Label>
           <div className="flex-1">
             <Select>
@@ -159,37 +189,60 @@ export const GenerateObituary = ({
         </div>
         <div className="max-w-6xl mx-auto">
           {!completed && !isPending && (
-            <p>Generated Obituary will appear here</p>
+            <Typewriter
+              text="> Complete the form to generate an obituary..."
+              repeat={false}
+              className="mt-8"
+            />
           )}
-          {!completed && isPending && <p>Generating Obituary...</p>}
+          {!completed && isPending && (
+            <Typewriter
+              text={`> Generating an obituary for ${entry.name}...`}
+              repeat={false}
+              className="mt-8"
+            />
+          )}
 
           <Response key={content}>{content}</Response>
           {completed && (
-            <div className="flex flex-col gap-4 mt-12 border-t pt-8">
-              <p>
-                What do you think of this obituary? To make revisions, click
-                "Edit"; or you can change your preferences on the left and click
-                "Regenerate".
-              </p>
-              <div className="flex items-center justify-center gap-4">
-                <Link
-                  href={`/${entry.id}/obituaries/${obituaryId}`}
-                  className={buttonVariants({ variant: "outline" })}
-                >
-                  Edit
-                </Link>
-                <Button
-                  type="button"
-                  variant="destructive"
-                  onClick={async () => {
-                    setCompleted(false);
-                    setContent(undefined);
-                    setObituaryId(undefined);
-                    await formAction();
-                  }}
-                >
-                  Regenerate
-                </Button>
+            <div className="flex flex-col gap-4 mt-12 border-t py-8">
+              <div className="grid lg:grid-cols-2 gap-8 max-w-lg mx-auto text-center">
+                <div className="space-y-4">
+                  <Link
+                    href={`/${entry.id}/obituaries/${obituaryId}`}
+                    className={buttonVariants({
+                      variant: "default",
+                      size: "lg",
+                      className: "flex items-center gap-2 leading-0.5",
+                    })}
+                  >
+                    Edit <Icon icon="mdi:pencil" />
+                  </Link>
+                  <p className="text-sm text-muted-foreground text-balance">
+                    Use our interactive AI tools to make revisions
+                  </p>
+                </div>
+                <div className="space-y-4">
+                  <Button
+                    type="button"
+                    variant="destructive"
+                    size="lg"
+                    className="flex items-center gap-2 mx-auto"
+                    onClick={async (e: React.MouseEvent<HTMLButtonElement>) => {
+                      e.preventDefault();
+                      setCompleted(false);
+                      setContent(undefined);
+                      setObituaryId(undefined);
+                      await formAction(e);
+                    }}
+                  >
+                    Regenerate <Icon icon="mdi:refresh" />
+                  </Button>
+                  <p className="text-sm text-muted-foreground text-balance">
+                    If you'd like a different version, change your preferences
+                    on the left and click "Regenerate"
+                  </p>
+                </div>
               </div>
             </div>
           )}

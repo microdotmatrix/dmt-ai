@@ -1,0 +1,1 @@
+ALTER TABLE "dmai2_document" DROP CONSTRAINT "valid_uuid_format";

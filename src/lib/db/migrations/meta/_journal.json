@@ -5,88 +5,37 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1756564207177,
-      "tag": "0000_handy_blizzard",
+      "when": 1757091469461,
+      "tag": "0000_bizarre_ego",
       "breakpoints": true
     },
     {
       "idx": 1,
       "version": "7",
-      "when": 1756564820161,
-      "tag": "0001_light_captain_cross",
+      "when": 1757094772469,
+      "tag": "0001_tiresome_hemingway",
       "breakpoints": true
     },
     {
       "idx": 2,
       "version": "7",
-      "when": 1756564881577,
-      "tag": "0002_ambiguous_speed",
+      "when": 1757094843481,
+      "tag": "0002_tiny_pet_avengers",
       "breakpoints": true
     },
     {
       "idx": 3,
       "version": "7",
-      "when": 1756587605819,
-      "tag": "0003_steep_barracuda",
+      "when": 1757094980979,
+      "tag": "0003_ancient_blindfold",
       "breakpoints": true
     },
     {
       "idx": 4,
       "version": "7",
-      "when": 1756588041558,
-      "tag": "0004_smooth_aqueduct",
+      "when": 1757176551433,
+      "tag": "0004_deep_blazing_skull",
       "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "7",
-      "when": 1756663374939,
-      "tag": "0005_clammy_rachel_grey",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "7",
-      "when": 1756663477754,
-      "tag": "0006_rare_leper_queen",
-      "breakpoints": true
-    },
-    {
-      "idx": 7,
-      "version": "7",
-      "when": 1756663558142,
-      "tag": "0007_faulty_zaladane",
-      "breakpoints": true
-    },
-    {
-      "idx": 8,
-      "version": "7",
-      "when": 1756794143584,
-      "tag": "0008_groovy_magus",
-      "breakpoints": true
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 859b3cb (feat: add document reference to chat schema and update related queries)
-    },
-    {
-      "idx": 9,
-      "version": "7",
-      "when": 1756858060181,
-      "tag": "0009_public_spiral",
-      "breakpoints": true
-    },
-    {
-      "idx": 10,
-      "version": "7",
-      "when": 1756858479384,
-      "tag": "0010_peaceful_hairball",
-      "breakpoints": true
-<<<<<<< HEAD
-=======
->>>>>>> f697123 (feat: add obituary chat sidebar and document management features)
-=======
->>>>>>> 859b3cb (feat: add document reference to chat schema and update related queries)
     }
   ]
 }

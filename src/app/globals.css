@@ -175,8 +175,8 @@
   --font-text: var(--text-family);
   --font-mono: var(--code-family);
 
-  --font-display-weight: 400;
-  --font-text-weight: 400;
+  /* --font-display-weight: 400; */
+  /* --font-text-weight: 400; */
 
   --text-xs: clamp(0.65rem, -0.02vi + 0.65rem, 0.64rem);
   --text-sm: clamp(0.78rem, 0.03vi + 0.78rem, 0.8rem);
@@ -192,13 +192,13 @@
   --text-7xl: clamp(4.84rem, 4.36vi + 3.97rem, 7.45rem);
 }
 
-@utility font-display {
+/* @utility font-display {
   font-weight: var(--font-display-weight, 400);
-}
+} */
 
-@utility font-text {
+/* @utility font-text {
   font-weight: var(--font-text-weight, 400);
-}
+} */
 
 @utility container {
   margin-inline: auto;
@@ -211,6 +211,8 @@
   html {
     scroll-behavior: smooth;
     overflow-x: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-accent) transparent;
   }
   * {
     @apply border-border outline-ring/50;
@@ -277,5 +279,15 @@
   }
   main {
     flex-grow: 1;
+  }
+}
+
+@layer utilities {
+  .loading-fade {
+    @apply starting:opacity-0 opacity-100 transition-opacity duration-200;
+  }
+  .scroll-style {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-accent) transparent;
   }
 }

@@ -1,1 +1,0 @@
-ALTER TABLE "dmai2_document" ADD COLUMN "token_usage" integer DEFAULT 0 NOT NULL;

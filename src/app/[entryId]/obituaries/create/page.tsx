@@ -1,6 +1,7 @@
 import { GenerateObituary } from "@/components/sections/obituaries/generate";
 import { buttonVariants } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
+import { ObituaryCreateSkeleton } from "@/components/skeletons/obituary-create-skeleton";
 import { getEntryById, getEntryDetailsById } from "@/lib/db/queries/entries";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -24,7 +25,7 @@ export default async function ObituaryCreatePage({ params }: PageProps) {
           Back to Entry
         </Link>
       </div>
-      <Suspense fallback="Loading...">
+      <Suspense fallback={<ObituaryCreateSkeleton />}>
         <ObituaryCreateContent entryId={entryId} />
       </Suspense>
     </main>

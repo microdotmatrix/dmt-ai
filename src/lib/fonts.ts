@@ -1,6 +1,6 @@
 import {
   Space_Mono as Code,
-  Montserrat as Display,
+  Pathway_Extreme as Display,
   Figtree as Text,
 } from "next/font/google";
 

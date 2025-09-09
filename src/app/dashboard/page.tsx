@@ -2,6 +2,7 @@ import { ActionButton } from "@/components/elements/action-button";
 import { CreatePortal } from "@/components/sections/dashboard/create-dialog";
 import { CreateEntryForm } from "@/components/sections/dashboard/create-form";
 import { CreateEntryImage } from "@/components/sections/dashboard/create-image";
+import { PageContentSkeleton } from "@/components/skeletons/page-content-skeleton";
 import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Icon } from "@/components/ui/icon";
@@ -14,6 +15,7 @@ import { auth } from "@clerk/nextjs/server";
 import { differenceInYears, format } from "date-fns";
 import Image from "next/image";
 import Link from "next/link";
+import { Suspense } from "react";
 
 export default async function DashboardPage() {
   const { userId } = await auth();
@@ -38,7 +40,9 @@ export default async function DashboardPage() {
   return (
     <main className="grid h-full place-items-center">
       <div className="max-w-screen-2xl w-full mx-auto py-8">
-        <PageContent />
+        <Suspense fallback={<PageContentSkeleton />}>
+          <PageContent />
+        </Suspense>
       </div>
     </main>
   );
@@ -80,7 +84,7 @@ const PageContent = async () => {
 
   if (!hasEntries) {
     return (
-      <div className="flex flex-col lg:flex-row gap-8 items-start lg:items-center">
+      <div className="flex flex-col lg:flex-row gap-8 items-start lg:items-center loading-fade">
         <div className="w-full lg:w-1/3">
           <CreateEntryForm />
         </div>
@@ -92,7 +96,7 @@ const PageContent = async () => {
   }
 
   return (
-    <div className="space-y-8 px-4 lg:px-8">
+    <div className="space-y-8 px-4 lg:px-8 loading-fade">
       {/* Header */}
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold">Dashboard</h1>
@@ -142,99 +146,102 @@ const FeaturedEntryCard = ({
   stats: { obituariesCount: number; imagesCount: number } | null;
 }) => {
   return (
-    <Card className="border-0 shadow-none">
-      <div className="grid md:grid-cols-2 min-h-fit">
-        {/* Image Section - Left Half */}
-        <figure className="relative shadow-xl dark:shadow-foreground/5 transition-shadow duration-200 rounded-lg overflow-clip aspect-auto 3xl:aspect-[4/3] max-w-full">
-          <Image
-            src={entry.image!}
-            alt={entry.name}
-            height={1280}
-            width={1280}
-            className="h-full w-full object-cover"
-            priority
-          />
-        </figure>
+    <Card className="border-0 shadow-xl grid md:grid-cols-2 min-h-fit p-4">
+      {/* Image Section - Left Half */}
+      <figure className="relative shadow-xl dark:shadow-foreground/5 transition-shadow duration-200 rounded-lg overflow-clip aspect-auto 3xl:aspect-[4/3] max-w-full">
+        <Image
+          src={entry.image!}
+          alt={entry.name}
+          height={1280}
+          width={1280}
+          className="h-full w-full object-cover"
+          priority
+        />
+      </figure>
 
-        {/* Content Section - Right Half */}
-        <div className="p-8 flex flex-col justify-center space-y-6">
-          <div>
-            <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide mb-2">
-              Most Recent
+      {/* Content Section - Right Half */}
+      <div className="p-8 flex flex-col justify-center space-y-6">
+        <div>
+          <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide mb-2">
+            Most Recent
+          </p>
+          <Link
+            href={`/${entry.id}`}
+            className="text-3xl font-display font-bold mb-2"
+          >
+            {entry.name}
+          </Link>
+          {entry.locationBorn && (
+            <p className="text-lg text-muted-foreground mb-6">
+              from {entry.locationBorn}
             </p>
-            <h2 className="text-3xl font-bold mb-2">{entry.name}</h2>
-            {entry.locationBorn && (
-              <p className="text-lg text-muted-foreground mb-6">
-                from {entry.locationBorn}
-              </p>
-            )}
+          )}
+        </div>
+
+        <div className="space-y-1 h-full">
+          <div className="flex items-center gap-4">
+            <span className="font-medium">Born:</span>
+            <span>
+              {entry.dateOfBirth
+                ? format(new Date(entry.dateOfBirth), "MMMM d, yyyy")
+                : ""}
+            </span>
+          </div>
+          <div className="flex items-center gap-4">
+            <span className="font-medium">Died:</span>
+            <span>
+              {entry.dateOfDeath
+                ? format(new Date(entry.dateOfDeath), "MMMM d, yyyy")
+                : ""}
+            </span>
+          </div>
+          <div className="flex items-center gap-4">
+            <span className="font-medium">Age:</span>
+            <span>
+              {entry.dateOfBirth && entry.dateOfDeath
+                ? differenceInYears(
+                    new Date(entry.dateOfDeath),
+                    new Date(entry.dateOfBirth)
+                  )
+                : ""}{" "}
+              years
+            </span>
           </div>
 
-          <div className="space-y-1 h-full">
-            <div className="flex items-center gap-4">
-              <span className="font-medium">Born:</span>
-              <span>
-                {entry.dateOfBirth
-                  ? format(new Date(entry.dateOfBirth), "MMMM d, yyyy")
-                  : ""}
-              </span>
-            </div>
-            <div className="flex items-center gap-4">
-              <span className="font-medium">Died:</span>
-              <span>
-                {entry.dateOfDeath
-                  ? format(new Date(entry.dateOfDeath), "MMMM d, yyyy")
-                  : ""}
-              </span>
-            </div>
-            <div className="flex items-center gap-4">
-              <span className="font-medium">Age:</span>
-              <span>
-                {entry.dateOfBirth && entry.dateOfDeath
-                  ? differenceInYears(
-                      new Date(entry.dateOfDeath),
-                      new Date(entry.dateOfBirth)
-                    )
-                  : ""}{" "}
-                years
-              </span>
-            </div>
-
-            {/* Generated Content Stats */}
-            {stats && (
-              <>
-                <div className="h-px bg-border my-4" />
-                <div className="space-y-1">
-                  <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide mb-2">
-                    Generated Content
-                  </p>
-                  <div className="flex items-center gap-4">
-                    <span className="font-medium">Obituaries:</span>
-                    <span className="flex items-center gap-1">
-                      <Icon
-                        icon="mdi:file-document-outline"
-                        className="w-4 h-4"
-                      />
-                      {stats.obituariesCount}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <span className="font-medium">Memorial Images:</span>
-                    <span className="flex items-center gap-1">
-                      <Icon
-                        icon="mdi:image-multiple-outline"
-                        className="w-4 h-4"
-                      />
-                      {stats.imagesCount}
-                    </span>
-                  </div>
+          {/* Generated Content Stats */}
+          {stats && (
+            <>
+              <div className="h-px bg-border my-4" />
+              <div className="space-y-1">
+                <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide mb-2">
+                  Generated Content
+                </p>
+                <div className="flex items-center gap-4">
+                  <span className="font-medium">Obituaries:</span>
+                  <span className="flex items-center gap-1">
+                    <Icon
+                      icon="mdi:file-document-outline"
+                      className="w-4 h-4"
+                    />
+                    {stats.obituariesCount}
+                  </span>
                 </div>
-              </>
-            )}
-          </div>
-          <div className="flex-shrink-0 flex flex-col gap-2 pr-4">
-            <ActionButtons entry={entry} />
-          </div>
+                <div className="flex items-center gap-4">
+                  <span className="font-medium">Memorial Images:</span>
+                  <span className="flex items-center gap-1">
+                    <Icon
+                      icon="mdi:image-multiple-outline"
+                      className="w-4 h-4"
+                    />
+                    {stats.imagesCount}
+                  </span>
+                </div>
+              </div>
+            </>
+          )}
+        </div>
+        <div className="flex-shrink-0 flex flex-col gap-2 pr-4">
+          <ActionButtons entry={entry} />
         </div>
       </div>
     </Card>

@@ -1,9 +1,7 @@
 import { relations } from "drizzle-orm";
 import {
   boolean,
-  check,
   foreignKey,
-  integer,
   json,
   primaryKey,
   text,
@@ -11,8 +9,8 @@ import {
   uuid,
   varchar,
 } from "drizzle-orm/pg-core";
-import { sql } from "drizzle-orm";
 import { pgTable } from "../utils";
+import { DocumentTable } from "./documents";
 import { EntryTable } from "./entries";
 import { UserTable } from "./users";
 
@@ -106,78 +104,6 @@ export const VoteRelations = relations(VoteTable, ({ one }) => ({
   }),
 }));
 
-export const DocumentTable = pgTable(
-  "document",
-  {
-    id: uuid("id").notNull().defaultRandom(),
-    userId: text("user_id")
-      .notNull()
-      .references(() => UserTable.id),
-    entryId: text("entry_id")
-      .notNull()
-      .references(() => EntryTable.id, { onDelete: "cascade" }),
-    title: text("title").notNull(),
-    content: text("content"),
-    kind: varchar("kind", { enum: ["obituary", "eulogy"] })
-      .notNull()
-      .default("obituary"),
-    tokenUsage: integer("token_usage").default(0),
-    createdAt: timestamp("created_at")
-      .$defaultFn(() => new Date())
-      .notNull(),
-  },
-  (table) => {
-    return [
-      primaryKey({ columns: [table.id, table.createdAt] }),
-      check("valid_uuid_format", sql`${table.id} ~ '^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$'`)
-    ];
-  }
-);
-
-export const DocumentRelations = relations(DocumentTable, ({ one }) => ({
-  user: one(UserTable, {
-    fields: [DocumentTable.userId],
-    references: [UserTable.id],
-  }),
-  entry: one(EntryTable, {
-    fields: [DocumentTable.entryId],
-    references: [EntryTable.id],
-  }),
-}));
-
-export const SuggestionTable = pgTable(
-  "suggestion",
-  {
-    id: uuid("id").notNull().defaultRandom(),
-    documentId: uuid("document_id").notNull(),
-    documentCreatedAt: timestamp("document_created_at").notNull(),
-    originalText: text("original_text").notNull(),
-    suggestedText: text("suggested_text").notNull(),
-    description: text("description"),
-    isResolved: boolean("is_resolved").notNull().default(false),
-    userId: text("user_id")
-      .notNull()
-      .references(() => UserTable.id),
-    createdAt: timestamp("created_at")
-      .$defaultFn(() => new Date())
-      .notNull(),
-  },
-  (table) => [
-    primaryKey({ columns: [table.id, table.createdAt] }),
-    foreignKey({
-      columns: [table.documentId, table.documentCreatedAt],
-      foreignColumns: [DocumentTable.id, DocumentTable.createdAt],
-    }),
-  ]
-);
-
-export const SuggestionRelations = relations(SuggestionTable, ({ one }) => ({
-  document: one(DocumentTable, {
-    fields: [SuggestionTable.documentId, SuggestionTable.documentCreatedAt],
-    references: [DocumentTable.id, DocumentTable.createdAt],
-  }),
-}));
-
 export const StreamTable = pgTable(
   "stream",
   {
@@ -203,9 +129,7 @@ export const StreamRelations = relations(StreamTable, ({ one }) => ({
   }),
 }));
 
-export const Chat = typeof ChatTable.$inferSelect;
-export const Message = typeof MessageTable.$inferSelect;
-export const Vote = typeof VoteTable.$inferSelect;
-export const Document = typeof DocumentTable.$inferSelect;
-export const Stream = typeof StreamTable.$inferSelect;
-export const Suggestion = typeof SuggestionTable.$inferSelect;
+export type Chat = typeof ChatTable.$inferSelect;
+export type Message = typeof MessageTable.$inferSelect;
+export type Vote = typeof VoteTable.$inferSelect;
+export type Stream = typeof StreamTable.$inferSelect;

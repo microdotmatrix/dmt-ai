@@ -66,10 +66,10 @@ export const Onboarding = () => {
       <div className="mx-auto w-full max-w-screen-xl">
         <div className="relative mx-auto mb-12 max-w-3xl sm:text-center">
           <div className="relative z-10">
-            <h2 className="text-3xl font-bold md:text-4xl lg:text-5xl">
+            <h2 className="text-2xl font-bold md:text-3xl lg:text-4xl text-balance uppercase">
               How we make Death Matter
             </h2>
-            <p className="text-foreground/60 mt-3 text-md">
+            <p className="text-foreground/60 mt-3 text-base">
               We are using technology to make one of the hardest things in life
               just a little bit easier. Our suite of cutting edge tools are
               built to modernize the process of commemorating the deceased using

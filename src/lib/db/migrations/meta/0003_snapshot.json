@@ -1,6 +1,6 @@
 {
-  "id": "6dced749-eed4-4989-8c9c-9ac9e0ae8734",
-  "prevId": "669d0257-d1cc-44a4-bbb2-3ce743bdc3c0",
+  "id": "311f5797-bceb-4a12-928c-022b94dcae72",
+  "prevId": "2494e424-78d3-4ed9-a46e-0f6d4afb4bb1",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -26,6 +26,24 @@
           "type": "text",
           "primaryKey": false,
           "notNull": true
+        },
+        "entry_id": {
+          "name": "entry_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "document_id": {
+          "name": "document_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "document_created_at": {
+          "name": "document_created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
         },
         "created_at": {
           "name": "created_at",
@@ -55,89 +73,37 @@
           ],
           "onDelete": "cascade",
           "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.dmai2_document": {
-      "name": "dmai2_document",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "gen_random_uuid()"
         },
-        "user_id": {
-          "name": "user_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "title": {
-          "name": "title",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "content": {
-          "name": "content",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "kind": {
-          "name": "kind",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'obituary'"
-        },
-        "token_usage": {
-          "name": "token_usage",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "default": 0
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "dmai2_document_user_id_dmai2_user_id_fk": {
-          "name": "dmai2_document_user_id_dmai2_user_id_fk",
-          "tableFrom": "dmai2_document",
-          "tableTo": "dmai2_user",
+        "dmai2_chat_entry_id_dmai2_entry_id_fk": {
+          "name": "dmai2_chat_entry_id_dmai2_entry_id_fk",
+          "tableFrom": "dmai2_chat",
+          "tableTo": "dmai2_entry",
           "columnsFrom": [
-            "user_id"
+            "entry_id"
           ],
           "columnsTo": [
             "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "dmai2_chat_document_id_document_created_at_dmai2_document_id_created_at_fk": {
+          "name": "dmai2_chat_document_id_document_created_at_dmai2_document_id_created_at_fk",
+          "tableFrom": "dmai2_chat",
+          "tableTo": "dmai2_document",
+          "columnsFrom": [
+            "document_id",
+            "document_created_at"
+          ],
+          "columnsTo": [
+            "id",
+            "created_at"
           ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {
-        "dmai2_document_id_created_at_pk": {
-          "name": "dmai2_document_id_created_at_pk",
-          "columns": [
-            "id",
-            "created_at"
-          ]
-        }
-      },
+      "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
@@ -260,6 +226,171 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
+    "public.dmai2_vote": {
+      "name": "dmai2_vote",
+      "schema": "",
+      "columns": {
+        "chat_id": {
+          "name": "chat_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "message_id": {
+          "name": "message_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "is_upvoted": {
+          "name": "is_upvoted",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "dmai2_vote_chat_id_dmai2_chat_id_fk": {
+          "name": "dmai2_vote_chat_id_dmai2_chat_id_fk",
+          "tableFrom": "dmai2_vote",
+          "tableTo": "dmai2_chat",
+          "columnsFrom": [
+            "chat_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "dmai2_vote_message_id_dmai2_message_id_fk": {
+          "name": "dmai2_vote_message_id_dmai2_message_id_fk",
+          "tableFrom": "dmai2_vote",
+          "tableTo": "dmai2_message",
+          "columnsFrom": [
+            "message_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "dmai2_vote_chat_id_message_id_pk": {
+          "name": "dmai2_vote_chat_id_message_id_pk",
+          "columns": [
+            "chat_id",
+            "message_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.dmai2_document": {
+      "name": "dmai2_document",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "entry_id": {
+          "name": "entry_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "title": {
+          "name": "title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "content": {
+          "name": "content",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "kind": {
+          "name": "kind",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'obituary'"
+        },
+        "token_usage": {
+          "name": "token_usage",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "default": 0
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "dmai2_document_user_id_dmai2_user_id_fk": {
+          "name": "dmai2_document_user_id_dmai2_user_id_fk",
+          "tableFrom": "dmai2_document",
+          "tableTo": "dmai2_user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "dmai2_document_entry_id_dmai2_entry_id_fk": {
+          "name": "dmai2_document_entry_id_dmai2_entry_id_fk",
+          "tableFrom": "dmai2_document",
+          "tableTo": "dmai2_entry",
+          "columnsFrom": [
+            "entry_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "dmai2_document_id_created_at_pk": {
+          "name": "dmai2_document_id_created_at_pk",
+          "columns": [
+            "id",
+            "created_at"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "public.dmai2_suggestion": {
       "name": "dmai2_suggestion",
       "schema": "",
@@ -358,72 +489,6 @@
           "columns": [
             "id",
             "created_at"
-          ]
-        }
-      },
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.dmai2_vote": {
-      "name": "dmai2_vote",
-      "schema": "",
-      "columns": {
-        "chat_id": {
-          "name": "chat_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "message_id": {
-          "name": "message_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "is_upvoted": {
-          "name": "is_upvoted",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "dmai2_vote_chat_id_dmai2_chat_id_fk": {
-          "name": "dmai2_vote_chat_id_dmai2_chat_id_fk",
-          "tableFrom": "dmai2_vote",
-          "tableTo": "dmai2_chat",
-          "columnsFrom": [
-            "chat_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "dmai2_vote_message_id_dmai2_message_id_fk": {
-          "name": "dmai2_vote_message_id_dmai2_message_id_fk",
-          "tableFrom": "dmai2_vote",
-          "tableTo": "dmai2_message",
-          "columnsFrom": [
-            "message_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {
-        "dmai2_vote_chat_id_message_id_pk": {
-          "name": "dmai2_vote_chat_id_message_id_pk",
-          "columns": [
-            "chat_id",
-            "message_id"
           ]
         }
       },
@@ -714,6 +779,106 @@
           "tableTo": "dmai2_user",
           "columnsFrom": [
             "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.dmai2_user_generated_image": {
+      "name": "dmai2_user_generated_image",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "entry_id": {
+          "name": "entry_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "epitaph_id": {
+          "name": "epitaph_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "template_id": {
+          "name": "template_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "image_url": {
+          "name": "image_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "metadata": {
+          "name": "metadata",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "dmai2_user_generated_image_user_id_dmai2_user_id_fk": {
+          "name": "dmai2_user_generated_image_user_id_dmai2_user_id_fk",
+          "tableFrom": "dmai2_user_generated_image",
+          "tableTo": "dmai2_user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "dmai2_user_generated_image_entry_id_dmai2_entry_id_fk": {
+          "name": "dmai2_user_generated_image_entry_id_dmai2_entry_id_fk",
+          "tableFrom": "dmai2_user_generated_image",
+          "tableTo": "dmai2_entry",
+          "columnsFrom": [
+            "entry_id"
           ],
           "columnsTo": [
             "id"

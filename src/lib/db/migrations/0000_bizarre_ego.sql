@@ -2,18 +2,24 @@ CREATE TABLE "dmai2_chat" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"title" text NOT NULL,
 	"user_id" text NOT NULL,
+	"entry_id" text NOT NULL,
+	"document_id" uuid,
+	"document_created_at" timestamp,
 	"created_at" timestamp NOT NULL,
 	"visibility" varchar DEFAULT 'private' NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE "dmai2_document_v2" (
-	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+CREATE TABLE "dmai2_document" (
+	"id" uuid DEFAULT gen_random_uuid() NOT NULL,
 	"user_id" text NOT NULL,
+	"entry_id" text NOT NULL,
 	"title" text NOT NULL,
 	"content" text,
 	"kind" varchar DEFAULT 'obituary' NOT NULL,
+	"token_usage" integer DEFAULT 0,
 	"created_at" timestamp NOT NULL,
-	CONSTRAINT "dmai2_document_v2_id_created_at_pk" PRIMARY KEY("id","created_at")
+	CONSTRAINT "dmai2_document_id_created_at_pk" PRIMARY KEY("id","created_at"),
+	CONSTRAINT "valid_uuid_format" CHECK ("dmai2_document"."id" ~ '^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$')
 );
 --> statement-breakpoint
 CREATE TABLE "dmai2_message" (
@@ -46,7 +52,6 @@ CREATE TABLE "dmai2_suggestion" (
 );
 --> statement-breakpoint
 CREATE TABLE "dmai2_vote" (
-	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"chat_id" uuid NOT NULL,
 	"message_id" uuid NOT NULL,
 	"is_upvoted" boolean NOT NULL,
@@ -99,6 +104,19 @@ CREATE TABLE "dmai2_entry" (
 	"updated_at" timestamp NOT NULL
 );
 --> statement-breakpoint
+CREATE TABLE "dmai2_user_generated_image" (
+	"id" text PRIMARY KEY NOT NULL,
+	"user_id" text NOT NULL,
+	"entry_id" text NOT NULL,
+	"epitaph_id" integer NOT NULL,
+	"template_id" text,
+	"image_url" text,
+	"metadata" json,
+	"status" text NOT NULL,
+	"created_at" timestamp NOT NULL,
+	"updated_at" timestamp NOT NULL
+);
+--> statement-breakpoint
 CREATE TABLE "dmai2_user_settings" (
 	"user_id" text PRIMARY KEY NOT NULL,
 	"theme" text DEFAULT 'system' NOT NULL,
@@ -135,14 +153,19 @@ CREATE TABLE "dmai2_user_upload" (
 );
 --> statement-breakpoint
 ALTER TABLE "dmai2_chat" ADD CONSTRAINT "dmai2_chat_user_id_dmai2_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."dmai2_user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "dmai2_document_v2" ADD CONSTRAINT "dmai2_document_v2_user_id_dmai2_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."dmai2_user"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "dmai2_chat" ADD CONSTRAINT "dmai2_chat_entry_id_dmai2_entry_id_fk" FOREIGN KEY ("entry_id") REFERENCES "public"."dmai2_entry"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "dmai2_chat" ADD CONSTRAINT "dmai2_chat_document_id_document_created_at_dmai2_document_id_created_at_fk" FOREIGN KEY ("document_id","document_created_at") REFERENCES "public"."dmai2_document"("id","created_at") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "dmai2_document" ADD CONSTRAINT "dmai2_document_user_id_dmai2_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."dmai2_user"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "dmai2_document" ADD CONSTRAINT "dmai2_document_entry_id_dmai2_entry_id_fk" FOREIGN KEY ("entry_id") REFERENCES "public"."dmai2_entry"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "dmai2_message" ADD CONSTRAINT "dmai2_message_chat_id_dmai2_chat_id_fk" FOREIGN KEY ("chat_id") REFERENCES "public"."dmai2_chat"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "dmai2_stream" ADD CONSTRAINT "dmai2_stream_chat_id_dmai2_chat_id_fk" FOREIGN KEY ("chat_id") REFERENCES "public"."dmai2_chat"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "dmai2_suggestion" ADD CONSTRAINT "dmai2_suggestion_user_id_dmai2_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."dmai2_user"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "dmai2_suggestion" ADD CONSTRAINT "dmai2_suggestion_document_id_document_created_at_dmai2_document_v2_id_created_at_fk" FOREIGN KEY ("document_id","document_created_at") REFERENCES "public"."dmai2_document_v2"("id","created_at") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "dmai2_suggestion" ADD CONSTRAINT "dmai2_suggestion_document_id_document_created_at_dmai2_document_id_created_at_fk" FOREIGN KEY ("document_id","document_created_at") REFERENCES "public"."dmai2_document"("id","created_at") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "dmai2_vote" ADD CONSTRAINT "dmai2_vote_chat_id_dmai2_chat_id_fk" FOREIGN KEY ("chat_id") REFERENCES "public"."dmai2_chat"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "dmai2_vote" ADD CONSTRAINT "dmai2_vote_message_id_dmai2_message_id_fk" FOREIGN KEY ("message_id") REFERENCES "public"."dmai2_message"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "dmai2_entry_details" ADD CONSTRAINT "dmai2_entry_details_entry_id_dmai2_entry_id_fk" FOREIGN KEY ("entry_id") REFERENCES "public"."dmai2_entry"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "dmai2_entry" ADD CONSTRAINT "dmai2_entry_user_id_dmai2_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."dmai2_user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "dmai2_user_generated_image" ADD CONSTRAINT "dmai2_user_generated_image_user_id_dmai2_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."dmai2_user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "dmai2_user_generated_image" ADD CONSTRAINT "dmai2_user_generated_image_entry_id_dmai2_entry_id_fk" FOREIGN KEY ("entry_id") REFERENCES "public"."dmai2_entry"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "dmai2_user_settings" ADD CONSTRAINT "dmai2_user_settings_user_id_dmai2_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."dmai2_user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "dmai2_user_upload" ADD CONSTRAINT "dmai2_user_upload_user_id_dmai2_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."dmai2_user"("id") ON DELETE cascade ON UPDATE no action;

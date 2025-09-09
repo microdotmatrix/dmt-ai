@@ -1,6 +1,8 @@
 import { pgTable } from "@/lib/db/utils";
 import { relations } from "drizzle-orm";
 import { boolean, integer, text, timestamp } from "drizzle-orm/pg-core";
+import { UserGeneratedImageTable } from "./media";
+import { SavedQuotesTable } from "./quotes";
 import { UserTable } from "./users";
 
 export const EntryTable = pgTable("entry", {
@@ -23,7 +25,7 @@ export const EntryTable = pgTable("entry", {
     .notNull(),
 });
 
-export const EntryRelations = relations(EntryTable, ({ one }) => ({
+export const EntryRelations = relations(EntryTable, ({ one, many }) => ({
   user: one(UserTable, {
     fields: [EntryTable.userId],
     references: [UserTable.id],
@@ -32,6 +34,8 @@ export const EntryRelations = relations(EntryTable, ({ one }) => ({
     fields: [EntryTable.id],
     references: [EntryDetailsTable.entryId],
   }),
+  generatedImages: many(UserGeneratedImageTable),
+  savedQuotes: many(SavedQuotesTable),
 }));
 
 export const EntryDetailsTable = pgTable("entry_details", {

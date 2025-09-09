@@ -1,2 +1,0 @@
-ALTER TABLE "dmai2_chat" ADD COLUMN "entry_id" text NOT NULL;--> statement-breakpoint
-ALTER TABLE "dmai2_chat" ADD CONSTRAINT "dmai2_chat_entry_id_dmai2_entry_id_fk" FOREIGN KEY ("entry_id") REFERENCES "public"."dmai2_entry"("id") ON DELETE cascade ON UPDATE no action;

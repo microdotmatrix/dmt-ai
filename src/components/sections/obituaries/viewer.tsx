@@ -9,7 +9,7 @@ interface ObituaryViewerProps {
 
 export const ObituaryViewer = ({ id, content }: ObituaryViewerProps) => {
   return (
-    <div>
+    <div className="loading-fade">
       <Response key={id}>{content}</Response>
     </div>
   );

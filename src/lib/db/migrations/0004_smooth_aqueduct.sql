@@ -1,1 +1,0 @@
-ALTER TABLE "dmai2_document" ALTER COLUMN "token_usage" DROP NOT NULL;

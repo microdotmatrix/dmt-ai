@@ -1,0 +1,1 @@
+ALTER TABLE "dmai2_user_generated_image" ADD CONSTRAINT "dmai2_user_generated_image_entry_id_created_at_dmai2_entry_id_created_at_fk" FOREIGN KEY ("entry_id","created_at") REFERENCES "public"."dmai2_entry"("id","created_at") ON DELETE no action ON UPDATE no action;
