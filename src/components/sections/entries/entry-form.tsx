@@ -93,7 +93,10 @@ export const EntryForm = ({ entry }: { entry: any }) => {
           {/* Dates */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
             <div className="space-y-0.5">
-              <Label htmlFor="dateOfBirth" className="text-xs font-normal ml-3">
+              <Label
+                htmlFor="dateOfBirth"
+                className="text-xs font-normal ml-1.25"
+              >
                 Birth Date
               </Label>
               <DatePicker

@@ -46,12 +46,15 @@ export function AnimatedInput({
       y: 0,
       scale: 1,
       color: "var(--color-muted-foreground)",
+      opacity: 1,
       originX: 0,
     },
     focused: {
-      y: -29,
+      y: -28,
+      x: -8,
       scale: 0.85,
       color: "var(--color-foreground)",
+      opacity: 0.5,
       originX: 0,
     },
   };

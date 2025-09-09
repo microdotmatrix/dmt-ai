@@ -4,14 +4,6 @@ import { Response } from "@/components/ai/response";
 import { Typewriter } from "@/components/elements/typewriter";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { generateObituary } from "@/lib/ai/actions";
 import { models } from "@/lib/ai/models";
 import type { Entry, EntryDetails } from "@/lib/db/schema";
@@ -22,6 +14,7 @@ import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { EntryDetailsCard } from "../entries/details-card";
 import { EntryCard } from "../entries/entry-card";
+import { ModelSelector } from "./model-selector";
 import { ObituaryOptions } from "./options";
 
 export const GenerateObituary = ({
@@ -111,13 +104,22 @@ export const GenerateObituary = ({
 
   return (
     <div className="grid md:grid-cols-6 gap-4 px-4 xl:px-8 loading-fade">
-      <aside className="md:col-span-3 2xl:col-span-2 space-y-4">
+      <aside className="md:col-span-3 2xl:col-span-2 space-y-4 order-2 md:order-1">
         <EntryCard entry={entry} />
         <EntryDetailsCard
           entry={entry}
           entryDetails={entryDetails!}
           collapsible
         />
+
+        <p className="text-xs text-muted-foreground text-center text-balance px-4">
+          <span className="font-semibold">NOTE:</span> The more details you can
+          provide, the better the result. Most of the fields in the details form
+          are optional, because we understand that some will have incomplete
+          information.
+        </p>
+
+        <ModelSelector />
 
         <form className="py-4 px-4 lg:px-2" onSubmit={formAction}>
           <ObituaryOptions
@@ -171,22 +173,7 @@ export const GenerateObituary = ({
           </section>
         </form>
       </aside>
-      <aside className="md:col-span-3 2xl:col-span-4">
-        <div className="flex flex-row items-center gap-4 px-4 md:px-0 lg:max-w-sm mx-auto md:mr-0 mb-8">
-          <Label htmlFor="languageModel">Language Model</Label>
-          <div className="flex-1">
-            <Select>
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select function coming soon..." />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="openai">OpenAI</SelectItem>
-                <SelectItem value="anthropic">Anthropic</SelectItem>
-                <SelectItem value="openrouter">OpenRouter</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
+      <article className="md:col-span-3 2xl:col-span-4 order-1 md:order-2 py-8">
         <div className="max-w-6xl mx-auto">
           {!completed && !isPending && (
             <Typewriter
@@ -247,7 +234,7 @@ export const GenerateObituary = ({
             </div>
           )}
         </div>
-      </aside>
+      </article>
     </div>
   );
 };

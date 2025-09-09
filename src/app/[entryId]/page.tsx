@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Icon } from "@/components/ui/icon";
 import { deleteDocumentById } from "@/lib/db/actions/documents";
 import { getEntryImages } from "@/lib/db/actions/images";
+import { getUserGeneratedImages } from "@/lib/db/queries";
 import { getDocumentsByEntryId } from "@/lib/db/queries/documents";
 import { getEntryById, getEntryDetailsById } from "@/lib/db/queries/entries";
 import { format } from "date-fns";
@@ -32,7 +33,7 @@ export default async function EntryEditPage({ params }: PageProps) {
   const obituaries = await getDocumentsByEntryId(entryId);
 
   // Fetch generated images for this deceased person
-  const generatedImages: any[] = [];
+  const generatedImages = await getUserGeneratedImages(entry.userId!, entryId);
 
   return (
     <main>

@@ -366,7 +366,7 @@ interface StepProps {
 const BiographicalDetailsStep = ({ data, onChange }: StepProps) => {
   return (
     <div className="space-y-6">
-      <div className="text-center mb-6">
+      <div className="text-center mb-8">
         <h3 className="text-lg font-semibold text-foreground">
           Biographical Details
         </h3>
@@ -375,7 +375,7 @@ const BiographicalDetailsStep = ({ data, onChange }: StepProps) => {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-6">
         <AnimatedInput
           label="Occupation"
           name="occupation"
@@ -413,7 +413,7 @@ const BiographicalDetailsStep = ({ data, onChange }: StepProps) => {
         />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-6">
         <AnimatedInput
           label="Education"
           name="education"
@@ -447,7 +447,7 @@ const BiographicalDetailsStep = ({ data, onChange }: StepProps) => {
         placeholder="A brief overview of their life story, character, and what made them special..."
       />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-6">
         <AnimatedInput
           label="Hobbies"
           name="hobbies"
@@ -500,7 +500,7 @@ const BiographicalDetailsStep = ({ data, onChange }: StepProps) => {
         </div>
 
         {data.militaryService && (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-x-4 gap-y-6 mt-8">
             <AnimatedInput
               label="Branch"
               name="militaryBranch"
@@ -568,8 +568,8 @@ const BiographicalDetailsStep = ({ data, onChange }: StepProps) => {
         </div>
 
         {data.religious && (
-          <div className="space-y-4 mt-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-6 mt-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-6">
               <AnimatedInput
                 label="Denomination"
                 name="denomination"
@@ -789,14 +789,14 @@ const ServiceInputs = ({
             />
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex flex-col md:flex-row items-center gap-4">
             <Select
               value={service.type}
               onValueChange={(value) =>
                 updateService?.(service.id, "type", value)
               }
             >
-              <SelectTrigger className="shrink w-28">
+              <SelectTrigger className="w-full md:shrink md:w-28">
                 <SelectValue placeholder="Type" />
               </SelectTrigger>
               <SelectContent>
@@ -809,17 +809,17 @@ const ServiceInputs = ({
               </SelectContent>
             </Select>
 
-            <div className="flex-1">
+            <div className="flex-1 max-w-full w-full">
               <Popover>
                 <PopoverTrigger asChild>
                   <Button
                     variant="outline"
                     className={cn(
-                      "w-full justify-start text-left font-normal",
+                      "w-full justify-start text-left font-normal truncate",
                       !service.date && "text-muted-foreground"
                     )}
                   >
-                    <Icon icon="lucide:calendar" className="mr-2 h-4 w-4" />
+                    <Icon icon="lucide:calendar" className="mr-1 h-4 w-4" />
                     {service.date ? (
                       `${format(service.date, "PPP")} ${
                         service.startTime
@@ -855,10 +855,11 @@ const ServiceInputs = ({
             <Button
               type="button"
               variant="outline"
-              size="sm"
+              className="w-full lg:w-fit flex items-center gap-2"
               onClick={() => removeService?.(service.id)}
             >
-              <Icon icon="lucide:trash" className="h-4 w-4" />
+              <Icon icon="lucide:trash" className="size-3 md:size-4" />{" "}
+              <span className="md:sr-only">Remove</span>
             </Button>
           </div>
         </div>
@@ -883,7 +884,7 @@ const ServiceDetailsStep = ({
     <div className="space-y-6">
       <div className="text-center mb-6">
         <h3 className="text-lg font-semibold text-foreground">
-          Service Details & Additional Information
+          Service Details & More
         </h3>
         <p className="text-sm text-muted-foreground">
           Final details about services and any additional information
@@ -897,38 +898,40 @@ const ServiceDetailsStep = ({
         removeService={removeService}
       />
 
-      <AnimatedInput
-        label="Donation Requests"
-        name="donationRequests"
-        type="textarea"
-        controlled={true}
-        value={data.donationRequests || ""}
-        onChange={(e) => onChange({ donationRequests: e.target.value })}
-        placeholder="Preferred charities or causes for donations in lieu of flowers..."
-        className="h-24"
-      />
+      <div className="space-y-6 mt-8">
+        <AnimatedInput
+          label="Donation Requests"
+          name="donationRequests"
+          type="textarea"
+          controlled={true}
+          value={data.donationRequests || ""}
+          onChange={(e) => onChange({ donationRequests: e.target.value })}
+          placeholder="Preferred charities or causes for donations in lieu of flowers..."
+          className="h-24"
+        />
 
-      <AnimatedInput
-        label="Special Acknowledgments"
-        name="specialAcknowledgments"
-        type="textarea"
-        controlled={true}
-        value={data.specialAcknowledgments || ""}
-        onChange={(e) => onChange({ specialAcknowledgments: e.target.value })}
-        placeholder="Thank you messages, special mentions to caregivers, friends, or organizations..."
-        className="h-24"
-      />
+        <AnimatedInput
+          label="Special Acknowledgments"
+          name="specialAcknowledgments"
+          type="textarea"
+          controlled={true}
+          value={data.specialAcknowledgments || ""}
+          onChange={(e) => onChange({ specialAcknowledgments: e.target.value })}
+          placeholder="Thank you messages, special mentions to caregivers, friends, or organizations..."
+          className="h-24"
+        />
 
-      <AnimatedInput
-        label="Additional Notes"
-        name="additionalNotes"
-        type="textarea"
-        controlled={true}
-        value={data.additionalNotes || ""}
-        onChange={(e) => onChange({ additionalNotes: e.target.value })}
-        placeholder="Any other relevant information you'd like to include in the obituary..."
-        className="h-24"
-      />
+        <AnimatedInput
+          label="Additional Notes"
+          name="additionalNotes"
+          type="textarea"
+          controlled={true}
+          value={data.additionalNotes || ""}
+          onChange={(e) => onChange({ additionalNotes: e.target.value })}
+          placeholder="Any other relevant information you'd like to include in the obituary..."
+          className="h-24"
+        />
+      </div>
 
       {/* Cancel Button */}
       {onCancel && (
