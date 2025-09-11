@@ -55,14 +55,13 @@ export const ObituarySidebar = ({
   initialMessages = [],
   isVisible,
 }: ObituarySidebarProps) => {
-  const [input, setInput] = useState("");
   const sidebarState = () => {
     if (isVisible) {
       return "visible";
     }
     return "hidden";
   };
-  const [sidebarOpen, setSidebarOpen] = useState(sidebarState());
+  const [input, setInput] = useState("");
 
   // Use existing chat ID or generate new UUID
   const chatId = useMemo(() => {
@@ -161,19 +160,19 @@ export const ObituarySidebar = ({
                     {message.parts.map((part, index) => {
                       if (part.type === "text") {
                         return (
-                          <div key={index} className="flex items-center gap-4">
+                          <div key={index} className="flex items-end gap-4">
                             <Response>{part.text}</Response>
-                            <Icon
-                              icon="carbon:machine-learning"
-                              className="size-6"
-                            />
+                            <Icon icon="carbon:keyboard" className="size-6" />
                           </div>
                         );
                       }
                       if (part.type === "data-updateDocument") {
                         return (
-                          <div key={index} className="flex items-center gap-4">
-                            <Icon icon="carbon:assembly" className="size-6" />
+                          <div key={index} className="flex items-end gap-4">
+                            <Icon
+                              icon="carbon:machine-learning"
+                              className="size-6"
+                            />
                             <p className="text-sm lg:text-base">
                               {
                                 (part.data as { changeDescription: string })

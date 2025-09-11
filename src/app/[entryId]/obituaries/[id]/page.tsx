@@ -1,7 +1,8 @@
 import { ObituarySidebar } from "@/components/sections/obituaries/sidebar";
 import { ObituaryViewer } from "@/components/sections/obituaries/viewer";
-import { ObituarySidebarSkeleton } from "@/components/skeletons/obituary-sidebar-skeleton";
 import { ObituaryViewerSkeleton } from "@/components/skeletons/obituary-viewer-skeleton";
+import { buttonVariants } from "@/components/ui/button";
+import { Icon } from "@/components/ui/icon";
 import {
   SidebarInset,
   SidebarProvider,
@@ -15,6 +16,7 @@ import { getDocumentById } from "@/lib/db/queries/documents";
 import { getEntryById } from "@/lib/db/queries/entries";
 import { auth } from "@clerk/nextjs/server";
 import { cookies } from "next/headers";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
@@ -47,25 +49,32 @@ export default async function ObituaryPage({ params }: PageProps) {
       style={
         {
           "--sidebar-width": "40rem",
-          "--sidebar-width-mobile": "20rem",
+          "--sidebar-width-mobile": "40rem",
         } as Object
       }
       defaultOpen={sidebarOpen || true}
       className="min-h-full grow"
     >
-      <Suspense fallback={<ObituarySidebarSkeleton />}>
-        <ObituarySidebar
-          documentId={id}
-          initialChat={existingChat}
-          initialMessages={messages}
-          isVisible={sidebarOpen}
-        />
-      </Suspense>
+      <ObituarySidebar
+        documentId={id}
+        initialChat={existingChat}
+        initialMessages={messages}
+        isVisible={sidebarOpen}
+      />
+
       <SidebarInset className="bg-transparent min-h-full grow">
         <SidebarTrigger />
         <Suspense fallback={<ObituaryViewerSkeleton />}>
           <ObituaryPageContent entryId={entryId} id={id} />
         </Suspense>
+        <div className="absolute top-0 right-0 p-1 z-10">
+          <Link
+            href={`/${entryId}`}
+            className={buttonVariants({ variant: "ghost", size: "icon" })}
+          >
+            <Icon icon="mdi:close" className="size-6" />
+          </Link>
+        </div>
       </SidebarInset>
     </SidebarProvider>
   );
@@ -91,8 +100,7 @@ const ObituaryPageContent = async ({
   }
 
   return (
-    <div className="max-w-6xl mx-auto p-8">
-      <p className="font-bold mb-6">{document.title}</p>
+    <div className="p-8">
       <ObituaryViewer id={document.id} content={document.content!} />
     </div>
   );

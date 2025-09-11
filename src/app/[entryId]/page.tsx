@@ -13,6 +13,7 @@ import { getUserGeneratedImages } from "@/lib/db/queries";
 import { getDocumentsByEntryId } from "@/lib/db/queries/documents";
 import { getEntryById, getEntryDetailsById } from "@/lib/db/queries/entries";
 import { format } from "date-fns";
+import { revalidatePath } from "next/cache";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
@@ -170,6 +171,7 @@ const EntryEditContent = async ({
                                   obituary.id
                                 );
                                 if (result.success) {
+                                  revalidatePath(`/${entry.id}`);
                                   return { error: false };
                                 } else {
                                   return { error: true, message: result.error };

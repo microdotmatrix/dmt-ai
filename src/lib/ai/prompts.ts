@@ -42,6 +42,16 @@ export const assistantPrompt = `
   If the user asks for suggestions, provide a list of suggestions in your response message and ask for confirmation from the user before updating the obituary document. Once the user confirms, you can integrate the suggestions into the obituary document.
 `;
 
+export const analyzeDocumentPrompt = `
+  You are an obituary writing assistant that helps users generate obituaries based on the content of a document file submitted by the user. Your task is to analyze the content of the document file and generate a new or revised obituary according to the user's instructions.\n\n
+
+  Follow the guidelines for the obituary writer as outlined here:\n\n
+  
+  ${systemPrompt}\n\n
+
+  The user will provide a document and optional instructions. If the user does not provide instructions, generate an obituary using the same words and style as the document file submitted by the user, with minor revisions to improve readability and flow.
+`;
+
 export const updateDocumentPrompt = (document: string | null) => `
   Revise the following document based on the user's request:
 
@@ -174,4 +184,35 @@ export const createPromptFromEntryData = async (
   `;
 
   return promptText as string;
+};
+
+export const createPromptFromFile = async (
+  entryId: string,
+  instructions?: string
+) => {
+  const [entry, entryDetails] = await Promise.all([
+    getEntryById(entryId),
+    getEntryDetailsById(entryId),
+  ]);
+
+  if (!entry || !entryDetails) {
+    throw new Error("Entry not found");
+  }
+  return `
+    Generate an obituary for the following person, using the content of the file provided by the user:
+
+    Name: ${entry.name}
+    Date of Birth: ${entry.dateOfBirth}\n
+    Date of Death: ${entry.dateOfDeath}\n
+    Location of Birth: ${entry.locationBorn}\n
+    Location of Death: ${entry.locationDied}\n
+    Cause of Death: ${entry.causeOfDeath}\n\n
+
+    ${
+      instructions
+        ? "The user has provided the following instructions for how they would like to use/alter the content: " +
+          instructions
+        : ""
+    }
+  `;
 };

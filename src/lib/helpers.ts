@@ -88,3 +88,58 @@ export function downloadImage(url: string, filename: string) {
       console.error("Error downloading image:", error);
     });
 }
+
+// Helper function to convert files to base64 data URLs
+export async function convertFilesToDataURLs(
+  files: FileList
+): Promise<
+  { type: "file"; filename: string; mediaType: string; url: string }[]
+> {
+  return Promise.all(
+    Array.from(files).map(
+      (file) =>
+        new Promise<{
+          type: "file";
+          filename: string;
+          mediaType: string;
+          url: string;
+        }>((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => {
+            resolve({
+              type: "file",
+              filename: file.name,
+              mediaType: file.type,
+              url: reader.result as string, // Data URL
+            });
+          };
+          reader.onerror = reject;
+          reader.readAsDataURL(file);
+        })
+    )
+  );
+}
+
+// Helper function to convert a single file to base64 data URL
+export async function convertFileToDataURL(
+  file: File
+): Promise<{ type: "file"; filename: string; mediaType: string; url: string }> {
+  return new Promise<{
+    type: "file";
+    filename: string;
+    mediaType: string;
+    url: string;
+  }>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      resolve({
+        type: "file",
+        filename: file.name,
+        mediaType: file.type,
+        url: reader.result as string, // Data URL
+      });
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}

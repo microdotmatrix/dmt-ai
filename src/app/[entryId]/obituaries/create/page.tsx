@@ -1,8 +1,12 @@
 import { GenerateObituary } from "@/components/sections/obituaries/generate";
+import { ObituaryCreateSkeleton } from "@/components/skeletons/obituary-create-skeleton";
 import { buttonVariants } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
-import { ObituaryCreateSkeleton } from "@/components/skeletons/obituary-create-skeleton";
-import { getEntryById, getEntryDetailsById } from "@/lib/db/queries/entries";
+import {
+  getDocumentsByEntryId,
+  getEntryById,
+  getEntryDetailsById,
+} from "@/lib/db/queries";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
@@ -38,8 +42,22 @@ const ObituaryCreateContent = async ({ entryId }: { entryId: string }) => {
     getEntryDetailsById(entryId),
   ]);
 
+  const documents = await getDocumentsByEntryId(entryId);
+
   if (!entry) {
     notFound();
+  }
+
+  if (documents.length >= 5) {
+    return (
+      <div>
+        <p className="text-center">
+          You have reached the maximum number of obituaries for this entry.
+          Return to your <Link href={`/${entryId}`}>entry</Link> to edit
+          existing obituaries, or delete an obituary to make room for a new one.
+        </p>
+      </div>
+    );
   }
 
   return <GenerateObituary entry={entry} entryDetails={entryDetails!} />;
