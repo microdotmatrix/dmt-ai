@@ -15,6 +15,7 @@ export const env = createEnv({
     STANDS4_UID: z.string().min(1),
     STANDS4_TOKENID: z.string().min(1),
     BIBLE_API_KEY: z.string().min(1),
+    RESEND_API_KEY: z.string().min(1),
   },
   emptyStringAsUndefined: true,
   experimental__runtimeEnv: process.env,

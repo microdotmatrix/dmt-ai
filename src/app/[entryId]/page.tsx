@@ -18,6 +18,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
+export const experimental_ppr = true;
+
 interface PageProps {
   params: Promise<{ entryId: string }>;
 }

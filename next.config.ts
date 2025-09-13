@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
     reactCompiler: true,
     viewTransition: true,
     useLightningcss: true,
+    ppr: "incremental",
   },
   typescript: {
     ignoreBuildErrors: true,

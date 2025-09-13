@@ -1,6 +1,7 @@
 "use client";
 
 import { ImageDialog } from "@/components/elements/image-dialog";
+import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { deleteImage } from "@/lib/db/actions/media";
 import { downloadImage } from "@/lib/helpers";
@@ -15,9 +16,14 @@ export const EpitaphThumbnail = ({ image }: { image: PlacidImage }) => {
 
   const handleDelete = () => {
     startTransition(async () => {
-      await deleteImage(image.id.toString());
-      startTransition(() => {
+      try {
+        await deleteImage(image.id.toString());
         toast("Image deleted successfully");
+      } catch (error) {
+        console.error("Error deleting image:", error);
+        toast("Failed to delete image");
+      }
+      startTransition(() => {
         router.refresh();
       });
     });
@@ -25,17 +31,23 @@ export const EpitaphThumbnail = ({ image }: { image: PlacidImage }) => {
 
   return (
     <figure className="relative overflow-hidden aspect-square">
-      <ImageDialog src={image?.image_url} alt="Generated epitaph" />
+      <ImageDialog
+        src={image?.image_url}
+        alt="Generated epitaph"
+        className="cursor-pointer"
+      />
       <figcaption className="absolute top-0.5 right-0.5 z-10 flex items-center justify-center gap-1">
-        <button
+        <Button
+          variant="ghost"
           className="p-1.5 rounded-md bg-background opacity-50 hover:opacity-100 transition-opacity cursor-pointer"
           disabled={isPending}
           onClick={() => downloadImage(image.image_url, `epitaph-${image.id}`)}
           aria-label="Download Image"
         >
           <Icon icon="carbon:download" className="size-4" />
-        </button>
-        {/* <button
+        </Button>
+        <Button
+          variant="ghost"
           className="p-1.5 rounded-md bg-background opacity-50 hover:opacity-100 transition-opacity cursor-pointer"
           disabled={isPending}
           onClick={handleDelete}
@@ -46,7 +58,7 @@ export const EpitaphThumbnail = ({ image }: { image: PlacidImage }) => {
           ) : (
             <Icon icon="mdi:close" className="size-4" />
           )}
-        </button> */}
+        </Button>
       </figcaption>
     </figure>
   );

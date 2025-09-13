@@ -1,5 +1,6 @@
 "use server";
 
+import { TAGS } from "@/lib/cache";
 import { db } from "@/lib/db";
 import { UserGeneratedImageTable } from "@/lib/db/schema";
 import {
@@ -8,14 +9,21 @@ import {
   type PlacidRequest,
 } from "@/lib/services/placid";
 import type { ActionState } from "@/lib/utils";
+import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
-import { revalidatePath } from "next/cache";
+import { revalidateTag } from "next/cache";
 
 export async function createEpitaphs(
   formData: PlacidRequest,
-  entryId: string,
-  userId: string
+  entryId: string
+  // userId: string
 ): Promise<ActionState> {
+  const { userId } = await auth();
+
+  if (!userId) {
+    return { error: "User not authenticated" };
+  }
+
   try {
     const templates = await fetchTemplates();
     const variables = {
@@ -85,7 +93,7 @@ export async function deleteImage(id: string) {
     await db
       .delete(UserGeneratedImageTable)
       .where(eq(UserGeneratedImageTable.id, id));
-    revalidatePath("/dashboard/epitaphs");
+    revalidateTag(TAGS.userGeneratedImages);
     return { result: "Image deleted successfully" };
   } catch (error) {
     console.error("Error deleting image:", error);

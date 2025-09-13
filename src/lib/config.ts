@@ -19,7 +19,7 @@ export const meta = {
     "eulogy",
   ],
   author: "MicrodotMatrix",
-  url: "https://github.com/microdotmatrix/deathmattertools-ai",
+  url: "https://deathmattertools.com",
 };
 
 // Navigation links array

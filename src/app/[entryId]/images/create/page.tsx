@@ -3,7 +3,7 @@ import { ImageResult } from "@/components/sections/memorials/image-results";
 import { Icon } from "@/components/ui/icon";
 import { createEpitaphs } from "@/lib/db/actions";
 import { getEntryById } from "@/lib/db/queries";
-import type { PlacidImage } from "@/lib/services/placid";
+import type { PlacidImage, PlacidRequest } from "@/lib/services/placid";
 import { fetchImage } from "@/lib/services/placid";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
@@ -49,9 +49,9 @@ export default async function Create({
   }
 
   // Create action wrapper that includes the entryId
-  const createEpitaphsAction = async (formData: any, userId: string) => {
+  const createEpitaphsAction = async (formData: PlacidRequest) => {
     "use server";
-    return createEpitaphs(formData, entryId, userId);
+    return createEpitaphs(formData, entryId);
   };
 
   return (
@@ -67,7 +67,7 @@ export default async function Create({
       <article className="flex-1 lg:flex-2/3 px-4 order-1 lg:order-2 flex">
         <Suspense fallback={<div>Loading...</div>}>
           {imageIds.length > 0 ? (
-            <div className=" grid grid-cols-1 gap-2 mx-auto">
+            <div className=" grid lg:grid-cols-2 gap-2 mx-auto my-4">
               {images &&
                 images.map((image) => (
                   <ImageResult

@@ -8,6 +8,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Icon } from "@/components/ui/icon";
 import { upsertUser } from "@/lib/auth/actions";
 import { deleteEntryAction } from "@/lib/db/actions/entries";
+import { getUserGeneratedImages } from "@/lib/db/queries";
 import { getDocumentsByEntryId } from "@/lib/db/queries/documents";
 import { getCreatorEntries, getUserUploads } from "@/lib/db/queries/entries";
 import { Entry } from "@/lib/db/schema";
@@ -70,15 +71,15 @@ const PageContent = async () => {
 
   let featuredEntryStats = null;
   if (featuredEntry) {
-    const obituaries = await getDocumentsByEntryId(featuredEntry.id);
+    // const obituaries = await getDocumentsByEntryId(featuredEntry.id);
 
-    // const [obituaries, generatedImages] = await Promise.all([
-    //   getObituariesByDeceasedId(featuredEntry.id),
-    //   getGeneratedImagesByDeceasedId(featuredEntry.id),
-    // ]);
+    const [obituaries, generatedImages] = await Promise.all([
+      getDocumentsByEntryId(featuredEntry.id),
+      getUserGeneratedImages(featuredEntry.userId!, featuredEntry.id),
+    ]);
     featuredEntryStats = {
       obituariesCount: obituaries.length,
-      imagesCount: 0,
+      imagesCount: generatedImages.length,
     };
   }
 

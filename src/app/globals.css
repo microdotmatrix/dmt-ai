@@ -38,24 +38,31 @@
   --sidebar-accent-foreground: oklch(0.325 0 0);
   --sidebar-border: oklch(0.9401 0 0);
   --sidebar-ring: oklch(0.7731 0 0);
-  --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
-    "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
+  --font-sans:
+    ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
-    "Liberation Mono", "Courier New", monospace;
+  --font-mono:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
   --radius: 0.5rem;
   --shadow-2xs: 0 1px 3px 0px hsl(0 0% 10.1961% / 0.05);
   --shadow-xs: 0 1px 3px 0px hsl(0 0% 10.1961% / 0.05);
-  --shadow-sm: 0 1px 3px 0px hsl(0 0% 10.1961% / 0.1),
+  --shadow-sm:
+    0 1px 3px 0px hsl(0 0% 10.1961% / 0.1),
     0 1px 2px -1px hsl(0 0% 10.1961% / 0.1);
-  --shadow: 0 1px 3px 0px hsl(0 0% 10.1961% / 0.1),
+  --shadow:
+    0 1px 3px 0px hsl(0 0% 10.1961% / 0.1),
     0 1px 2px -1px hsl(0 0% 10.1961% / 0.1);
-  --shadow-md: 0 1px 3px 0px hsl(0 0% 10.1961% / 0.1),
+  --shadow-md:
+    0 1px 3px 0px hsl(0 0% 10.1961% / 0.1),
     0 2px 4px -1px hsl(0 0% 10.1961% / 0.1);
-  --shadow-lg: 0 1px 3px 0px hsl(0 0% 10.1961% / 0.1),
+  --shadow-lg:
+    0 1px 3px 0px hsl(0 0% 10.1961% / 0.1),
     0 4px 6px -1px hsl(0 0% 10.1961% / 0.1);
-  --shadow-xl: 0 1px 3px 0px hsl(0 0% 10.1961% / 0.1),
+  --shadow-xl:
+    0 1px 3px 0px hsl(0 0% 10.1961% / 0.1),
     0 8px 10px -1px hsl(0 0% 10.1961% / 0.1);
   --shadow-2xl: 0 1px 3px 0px hsl(0 0% 10.1961% / 0.25);
   --tracking-normal: 0em;
@@ -95,24 +102,31 @@
   --sidebar-accent-foreground: oklch(0.9674 0.0013 286.3752);
   --sidebar-border: oklch(0.2739 0.0055 286.0326);
   --sidebar-ring: oklch(0.8711 0.0055 286.286);
-  --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
-    "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
+  --font-sans:
+    ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
-    "Liberation Mono", "Courier New", monospace;
+  --font-mono:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
   --radius: 0.5rem;
   --shadow-2xs: 0 1px 3px 0px hsl(0 0% 10.1961% / 0.05);
   --shadow-xs: 0 1px 3px 0px hsl(0 0% 10.1961% / 0.05);
-  --shadow-sm: 0 1px 3px 0px hsl(0 0% 10.1961% / 0.1),
+  --shadow-sm:
+    0 1px 3px 0px hsl(0 0% 10.1961% / 0.1),
     0 1px 2px -1px hsl(0 0% 10.1961% / 0.1);
-  --shadow: 0 1px 3px 0px hsl(0 0% 10.1961% / 0.1),
+  --shadow:
+    0 1px 3px 0px hsl(0 0% 10.1961% / 0.1),
     0 1px 2px -1px hsl(0 0% 10.1961% / 0.1);
-  --shadow-md: 0 1px 3px 0px hsl(0 0% 10.1961% / 0.1),
+  --shadow-md:
+    0 1px 3px 0px hsl(0 0% 10.1961% / 0.1),
     0 2px 4px -1px hsl(0 0% 10.1961% / 0.1);
-  --shadow-lg: 0 1px 3px 0px hsl(0 0% 10.1961% / 0.1),
+  --shadow-lg:
+    0 1px 3px 0px hsl(0 0% 10.1961% / 0.1),
     0 4px 6px -1px hsl(0 0% 10.1961% / 0.1);
-  --shadow-xl: 0 1px 3px 0px hsl(0 0% 10.1961% / 0.1),
+  --shadow-xl:
+    0 1px 3px 0px hsl(0 0% 10.1961% / 0.1),
     0 8px 10px -1px hsl(0 0% 10.1961% / 0.1);
   --shadow-2xl: 0 1px 3px 0px hsl(0 0% 10.1961% / 0.25);
 }
@@ -290,5 +304,76 @@
   .scroll-style {
     scrollbar-width: thin;
     scrollbar-color: var(--color-accent) transparent;
+  }
+}
+
+@keyframes fade {
+  from {
+    filter: blur(3px);
+    opacity: 0;
+  }
+  to {
+    filter: blur(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slide {
+  from {
+    translate: var(--slide-offset);
+  }
+  to {
+    translate: 0;
+  }
+}
+
+::view-transition-new(.animate-slide-from-left) {
+  --slide-offset: -60px;
+  animation:
+    var(--duration-enter) ease-out var(--duration-exit) both fade,
+    var(--duration-move) ease-in-out both slide;
+}
+::view-transition-old(.animate-slide-to-right) {
+  --slide-offset: 60px;
+  animation:
+    var(--duration-exit) ease-in both fade reverse,
+    var(--duration-move) ease-in-out both slide reverse;
+}
+
+::view-transition-new(.animate-slide-from-right) {
+  --slide-offset: 60px;
+  animation:
+    var(--duration-enter) ease-out var(--duration-exit) both fade,
+    var(--duration-move) ease-in-out both slide;
+}
+
+::view-transition-old(.animate-slide-to-left) {
+  --slide-offset: -60px;
+  animation:
+    var(--duration-exit) ease-in both fade reverse,
+    var(--duration-move) ease-in-out both slide reverse;
+}
+
+::view-transition-group(.animate-morph) {
+  animation-duration: var(--duration-move);
+}
+
+/* 
+ * Using view-transition-image-pair and not view-transition-group to preserve
+ * the default animation which includes automatic position and scale morphing
+ */
+::view-transition-image-pair(.animate-morph) {
+  animation-name: via-blur;
+}
+
+/* 
+ * Blur animation for view transitions with shared elements. 
+ * Fast-moving elements can be visually jarring as the eye tries
+ * to track them. This creates a poor man's motion blur we can
+ * use to make these transitions smoother.
+ */
+@keyframes via-blur {
+  30% {
+    filter: blur(3px);
   }
 }
